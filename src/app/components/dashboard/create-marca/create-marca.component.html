@@ -1,0 +1,29 @@
+<div class="mt-4 col-md-6 offset-md-3">
+    <div class="col">
+      <h1>{{titulo}}marca
+      </h1>
+    </div>
+    <div class="row">
+      <form [formGroup]="createMarca" (ngSubmit)="agregarEditar()">
+        <div class="col">  
+          <mat-form-field style="width: 100%;">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" maxlength="50">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <button mat-raised-button class="btn btn-primary" type="submit">Guardar</button>
+          <button mat-raised-button class="btn btn-warning ms-2" routerLink="/dashboard/mecanicos">Volver</button>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="submitted && createMarca.invalid" class="p-3 text-white bg-danger border border-danger-subtle rounded-3 mt-4">
+        Debe ingresar correctamente los datos solicitados.
+    </div>
+  </div>
+
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#0C3B81" type = "ball-scale-pulse" [fullScreen] = "true">
+    <p style="color: white" > CARGANDO... </p>
+</ngx-spinner>
+  
+    

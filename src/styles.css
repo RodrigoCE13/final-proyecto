@@ -1,1 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.body{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    background-image: linear-gradient(to top, #170c5c, #3d2f73, #5f528a, #8077a1, #a39eb7, #b7b3c4, #cbc9d2, #dfdfdf, #e7e7e7, #efefef, #f7f7f7, #ffffff);
+}
+.login{
+    width: 100%;
+    max-width: 330px;
+    text-align: center;
+}
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0 auto;
+}
+.ancho{
+    width: 100%;
+}
+.nav-item {
+    padding: 0 10px;
+}
+
+.nav-item:hover,
+.nav-item .active {
+    cursor: pointer;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+.header{
+    background-color: #22244f;
+}
+
+table {
+    width: 100%;
+    margin: 1px;
+  }
+th{
+  width: 10%;
+  background-color: #554688;
+  color: #ffffff;
+}
+
+a{
+  cursor: pointer;
+}

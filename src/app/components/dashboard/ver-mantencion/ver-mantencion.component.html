@@ -1,0 +1,74 @@
+<div class="col-md-8 offset-md-2 ">
+    <div class="row align-items-center mt-4">
+      <div class="col">
+          <h1 class="">Lista de mantencion</h1>
+      </div>
+      <h4 class="mensajeTitulo mt-2" *ngIf="mantenciones.length == 0">No hay datos para mostrar</h4>
+    </div>
+    <div class="mt-2" *ngIf="mantenciones.length > 0">
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+      </mat-form-field>
+    </div>
+    <div>
+      <table *ngIf="mantenciones.length > 0" mat-table [dataSource]="dataSource" class="mat-elevation-z4" matSort>
+        <!-- Columnas de la tabla -->
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef class="text-light">#</th>
+          <td mat-cell *matCellDef="let i = index">{{ i + 1 }}</td>
+        </ng-container>
+      
+        <ng-container matColumnDef="vehiculo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-light">Vehiculo</th>
+          <td mat-cell *matCellDef="let mantencion">{{ getVehiculoPatente(mantencion.vehiculo) }}</td>
+        </ng-container>
+      
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef class="text-light">Fecha</th>
+          <td mat-cell *matCellDef="let mantencion">{{ mantencion.fecha }}</td>
+        </ng-container>
+      
+        <ng-container matColumnDef="costo">
+          <th mat-header-cell *matHeaderCellDef class="text-light">Costo</th>
+          <td mat-cell *matCellDef="let mantencion">{{ mantencion.costo }}</td>
+        </ng-container>
+      
+        <ng-container matColumnDef="encargado">
+          <th mat-header-cell *matHeaderCellDef class="text-light">Encargado</th>
+          <td mat-cell *matCellDef="let mantencion">{{ getMecanicoNombre(mantencion.mecanico) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef class="text-light">Descripcion</th>
+            <td mat-cell *matCellDef="let mantencion">{{ mantencion.descripcion }}</td>
+          </ng-container>
+      
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="text-light">Acciones</th>
+          <td mat-cell *matCellDef="let mantencion">
+            <a matTooltip="Editar mantencion" [routerLink]="['/dashboard/edit-mantencion/',mantencion.id]" class="text-primary">
+              <mat-icon>edit</mat-icon>
+            </a>
+            <a matTooltip="Eliminar mantencion" (click)="eliminarMantencion(mantencion.id)" class="text-danger">
+              <mat-icon>delete</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+      
+        <!-- Filas de la tabla -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[3, 5]" aria-label="Select page of users"></mat-paginator>
+    </div>
+    <div>
+      <button mat-raised-button class="btn btn-primary" type="button" routerLink="/dashboard/create-mantencion"><mat-icon>playlist_add</mat-icon> Agregar mantencion</button>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+
