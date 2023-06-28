@@ -33,7 +33,7 @@ export class CreateTipoMantencionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toastr.info('Los campos que contengan * son obligatorios', 'Importante', { positionClass: 'toast-bottom-right' });
+    this.toastr.info('Los campos que contengan * son obligatorios', 'Importante', { positionClass: 'toast-top-right' });
     this.esEditar();
   }
   agregarEditar(){
@@ -62,33 +62,70 @@ export class CreateTipoMantencionComponent implements OnInit {
 
     this._tipoMantencionService.actualizarTipoMantencion(id, tipoMantencion).then(()=>{
       this.spinner.hide();
-      this.toastr.info('El tipo fue modificado con exito!', 'Tipo modificada',{positionClass: 'toast-bottom-right'});
+      this.toastr.info('El tipo fue modificado con exito!', 'Tipo modificada',{positionClass: 'toast-top-right'});
       this.router.navigate(['/dashboard/tipo-mantenciones']);
     })
   })
   }
 
-  agregarTipoMantencion(){
-    const tipoMantencion:any={
-      nombre: this.createTipoMantencion.value.nombre,
-      fechaCreacion: new Date(),
-      fechaActualizacion: new Date(),
-    }
-    this.spinner.show();
-    this.afAuth.currentUser.then(user => {
-      if (user) {
-        tipoMantencion.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
-      }
-    this._tipoMantencionService.agregarTipoMantencion(tipoMantencion).then(()=>{
-      console.log('Tipo creado con exito');
-      this.toastr.success('El tipo fue registrada con exito!', 'Tipo registrada',{positionClass: 'toast-bottom-right'});
+  // agregarTipoMantencion(){
+  //   const nombreTipoMantencion = this.createTipoMantencion.value.nombre;
+  //   const tipoMantencion:any={
+  //     nombre: nombreTipoMantencion.toLowerCase().charAt(0).toUpperCase() + nombreTipoMantencion.toLowerCase().slice(1),
+  //     fechaCreacion: new Date(),
+  //     fechaActualizacion: new Date(),
+  //   }
+  //   this.spinner.show();
+  //   this.afAuth.currentUser.then(user => {
+  //     if (user) {
+  //       tipoMantencion.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
+  //     }
+  //   this._tipoMantencionService.agregarTipoMantencion(tipoMantencion).then(()=>{
+  //     console.log('Tipo creado con exito');
+  //     this.toastr.success('El tipo fue registrada con exito!', 'Tipo registrada',{positionClass: 'toast-top-right'});
+  //     this.spinner.hide();
+  //     this.router.navigate(['/dashboard/tipo-mantenciones']);
+  //   }).catch(error=>{
+  //     console.log(error);
+  //     this.spinner.hide();
+  //   })
+  // })
+  // }
+
+  agregarTipoMantencion() {
+    const nombreTipoMantencion = this.createTipoMantencion.value.nombre.toUpperCase();
+    
+    // Verificar si el nombre del tipo de mantención ya existe
+    this._tipoMantencionService.verificarNombreTipoMantencion(nombreTipoMantencion).then((existe) => {
+    if (existe) {
+      //El tipo de mantención ya existe, no se puede guardar
+      this.toastr.error('El tipo de mantención ya existe', 'Error', { positionClass: 'toast-top-right' });
+      return;
+    }else{
+      //el tipo de mantención existe, se puede guardar
+      const tipoMantencion: any = {
+        nombre:  nombreTipoMantencion.toLowerCase().charAt(0).toUpperCase() + nombreTipoMantencion.toLowerCase().slice(1),
+        fechaCreacion: new Date(),
+        fechaActualizacion: new Date(),
+      };
+      this.spinner.show();
+      this.afAuth.currentUser.then((user) => {
+        if (user) {
+          tipoMantencion.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
+        }
+    
+      this._tipoMantencionService.agregarTipoMantencion(tipoMantencion).then(()=>{
+      console.log('Tipo creado con éxito');
+      this.toastr.success('El tipo fue registrado con éxito!', 'Tipo registrado', { positionClass: 'toast-top-right' });
       this.spinner.hide();
       this.router.navigate(['/dashboard/tipo-mantenciones']);
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error);
       this.spinner.hide();
-    })
-  })
+    });
+  });
+  }
+  }); 
   }
 
   esEditar(){

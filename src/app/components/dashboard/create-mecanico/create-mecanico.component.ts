@@ -37,7 +37,7 @@ export class CreateMecanicoComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.toastr.info('Los campos que contengan * son obligatorios', 'Importante', { positionClass: 'toast-bottom-right' });
+    this.toastr.info('Los campos que contengan * son obligatorios', 'Importante', { positionClass: 'toast-top-right' });
     this.esEditar();
   }
 
@@ -70,7 +70,7 @@ export class CreateMecanicoComponent implements OnInit {
 
       this._mecanicoService.actualizarMecanico(id, mecanico).then(()=>{
         this.spinner.hide();
-       this.toastr.info('El mecanico fue modificado con exito!', 'Mecanico modificado',{positionClass: 'toast-bottom-right'});
+       this.toastr.info('El mecanico fue modificado con exito!', 'Mecanico modificado',{positionClass: 'toast-top-right'});
        this.router.navigate(['/dashboard/mecanicos']);
       })
     })
@@ -92,7 +92,7 @@ export class CreateMecanicoComponent implements OnInit {
       }
     this._mecanicoService.agregarMecanico(mecanico).then(()=>{//<-- Llamamos al metodo agregarMecanico del servicio y le pasamos el objeto mecanico
       console.log('Mecanico creado con exito');
-      this.toastr.success('El mecanico fue registrado con exito!', 'Mecanico registrado',{positionClass: 'toast-bottom-right'});
+      this.toastr.success('El mecanico fue registrado con exito!', 'Mecanico registrado',{positionClass: 'toast-top-right'});
       this.spinner.hide();
       this.router.navigate(['/dashboard/mecanicos']);
     }).catch(error=>{

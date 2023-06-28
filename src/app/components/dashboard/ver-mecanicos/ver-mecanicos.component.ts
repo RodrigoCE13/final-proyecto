@@ -52,7 +52,7 @@ export class VerMecanicosComponent implements OnInit {
   eliminarMecanico(id:string){//<-- Metodo para eliminar un mecanico
     this._mecanicoService.eliminarMecanico(id).then(()=>{//<-- Llamamos al metodo eliminarMecanico del servicio y le pasamos el id del mecanico
       console.log('Mecanico eliminado con exito');
-      this.toastr.error('El mecanico fue eliminado con exito!', 'Mecanico eliminado',{positionClass: 'toast-bottom-right'});
+      this.toastr.success('El mecanico fue eliminado con exito!', 'Mecanico eliminado',{positionClass: 'toast-top-right'});
     }).catch(error=>{
       console.log(error);
     })

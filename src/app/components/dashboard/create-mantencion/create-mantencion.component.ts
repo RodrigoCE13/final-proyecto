@@ -48,7 +48,7 @@ export class CreateMantencionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toastr.info('Los campos que contengan * son obligatorios', 'Importante', { positionClass: 'toast-bottom-right' });
+    this.toastr.info('Los campos que contengan * son obligatorios', 'Importante', { positionClass: 'toast-top-right' });
     this.esEditar();
     this.getMarcas();
 
@@ -103,7 +103,6 @@ export class CreateMantencionComponent implements OnInit {
     this.mostrarTipoLegal = false;
     this.mostrarTipoPrev = false;
   }
-
   agregarMantencion() {
     const mantencion: any = {
       descripcion: this.createMantencion.value.descripcion,
@@ -118,24 +117,65 @@ export class CreateMantencionComponent implements OnInit {
       fechaActualizacion: new Date(),
     };
   
+    const fechaActual = new Date();
+    const fechaIngresada = new Date(mantencion.fecha);
+  
+    // Se obtienen los años, meses y días de las fechas
+    const yearIngresado = fechaIngresada.getFullYear();
+    const monthIngresado = fechaIngresada.getMonth();
+    const dayIngresado = fechaIngresada.getDate();
+    const yearActual = fechaActual.getFullYear();
+    const monthActual = fechaActual.getMonth();
+    const dayActual = fechaActual.getDate();
+  
+    // Verificar si se ha ingresado una fecha de próxima mantención
+    if (mantencion.fechaProxMantencion) {
+      const fechaProxMantencion = new Date(mantencion.fechaProxMantencion);
+      const yearProxMantencion = fechaProxMantencion.getFullYear();
+      const monthProxMantencion = fechaProxMantencion.getMonth();
+      const dayProxMantencion = fechaProxMantencion.getDate();
+  
+      if (
+        yearProxMantencion < yearActual ||
+        (yearProxMantencion === yearActual && monthProxMantencion < monthActual) ||
+        (yearProxMantencion === yearActual && monthProxMantencion === monthActual && dayProxMantencion < dayActual)
+      ) {
+        this.toastr.error('La fecha de próxima mantención debe ser mayor a la fecha actual', 'Error', { positionClass: 'toast-top-right' });
+        return;
+      }
+  
+      mantencion.fechaProxMantencion = fechaProxMantencion;
+    }
+  
+    if (
+      yearIngresado > yearActual ||
+      (yearIngresado === yearActual && monthIngresado > monthActual) ||
+      (yearIngresado === yearActual && monthIngresado === monthActual && dayIngresado > dayActual)
+    ) {
+      this.toastr.error('No se permite guardar mantenciones futuras', 'Error', { positionClass: 'toast-top-right' });
+      return;
+    }
+  
     this.spinner.show();
   
     this.afAuth.currentUser.then(user => {
       if (user) {
         mantencion.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
       }
-  
-      this._mantencionService.agregarMantencion(mantencion).then(() => {
-        console.log('Mantencion creado con exito');
-        this.toastr.success('La mantencion fue registrada con exito!', 'mantencion registrada', { positionClass: 'toast-bottom-right' });
-        this.spinner.hide();
-        this.router.navigate(['/dashboard/mantenciones']);
-      }).catch(error => {
-        console.log(error);
-        this.spinner.hide();
-      });
+      this._mantencionService.agregarMantencion(mantencion)
+        .then(() => {
+          console.log('Mantencion creada con éxito');
+          this.toastr.success('La mantencion fue registrada exitosamente!', 'Mantencion Registrada', { positionClass: 'toast-top-right' });
+          this.spinner.hide();
+          this.router.navigate(['/dashboard/mantenciones']);
+        })
+        .catch(error => {
+          console.log(error);
+          this.spinner.hide();
+        });
     });
   }
+  
 
   mostrarProximaFecha() {
     this.mostrarProxFecha = !this.mostrarProxFecha;
@@ -176,7 +216,7 @@ export class CreateMantencionComponent implements OnInit {
   
       this._mantencionService.actualizarMantencion(id, mantencion).then(() => {
         this.spinner.hide();
-        this.toastr.info('La mantencion fue modificada con exito!', 'Mantencion modificada', { positionClass: 'toast-bottom-right' });
+        this.toastr.info('La mantencion fue modificada con exito!', 'Mantencion modificada', { positionClass: 'toast-top-right' });
         this.router.navigate(['/dashboard/mantenciones']);
       });
     });

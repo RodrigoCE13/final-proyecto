@@ -51,7 +51,7 @@ export class VerMarcaComponent implements OnInit {
   eliminarMarca(id:string){
     this._marcaService.eliminarMarca(id).then(()=>{
       console.log('Marca eliminada con exito');
-      this.toastr.success('La marca fue eliminads con exito!', 'Marca eliminado',{positionClass: 'toast-bottom-right'});
+      this.toastr.success('La marca fue eliminads con exito!', 'Marca eliminada',{positionClass: 'toast-top-right'});
     }).catch(error=>{
       console.log(error);
     })

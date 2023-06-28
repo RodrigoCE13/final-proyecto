@@ -1,63 +1,61 @@
 <div class="mt-4 col-md-6 offset-md-3">
     <div class="col">
-      <h1>{{titulo}}vehiculo
-      </h1>
+        <h1>{{titulo}}vehiculo
+        </h1>
     </div>
     <div class="row">
-      <form [formGroup]="createVehiculo" (ngSubmit)="agregarEditar()">
-        <div class="col">  
-          <mat-form-field style="width: 50%;">
-            <mat-label>Patente</mat-label>
-            <input matInput formControlName="patente" maxlength="50">
-          </mat-form-field>
-          <mat-form-field style="width: 50%;">
-            <mat-label>Tipo</mat-label >
-            <mat-select formControlName="tipoVehiculo">
-              <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">{{tipo.nombre}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col">
-            <mat-form-field style="width: 50%;">
-                <mat-label>Marca</mat-label >
-                <mat-select formControlName="marca">
-                  <mat-option *ngFor="let marca of marcas" [value]="marca.id">{{marca.nombre}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-          <mat-form-field style="width: 50%;">
-            <mat-label>Modelo</mat-label >
-            <input matInput formControlName="modelo" maxlength="50">
-          </mat-form-field>
-        </div>
-        <div class="col">
-            <mat-form-field style="width: 50%;">
-                <mat-label>Precio</mat-label >
-                <input matInput formControlName="precio" maxlength="50">
-              </mat-form-field>
-          <mat-form-field style="width: 50%;">
-            <mat-label>Año</mat-label >
-            <input matInput formControlName="annio" maxlength="50">
-          </mat-form-field>
-        </div>
-        <div class="col">
-            <mat-form-field style="width: 50%;">
-                <mat-label>Kilometraje</mat-label >
-                <input matInput formControlName="kilometraje" maxlength="50">
-              </mat-form-field>
-        </div>
-        <div class="col">
-          <button mat-raised-button class="btn btn-primary" type="submit">Guardar</button>
-          <button mat-raised-button class="btn btn-warning ms-2" routerLink="/dashboard/vehiculos">Volver</button>
-        </div>
-      </form>
+        <form [formGroup]="createVehiculo" (ngSubmit)="agregarEditar()">
+            <div class="col">
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Patente</mat-label>
+                    <input matInput formControlName="patente" maxlength="8" minlength="6">
+                </mat-form-field>
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Tipo</mat-label>
+                    <mat-select formControlName="tipoVehiculo">
+                        <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">{{tipo.nombre}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Marca</mat-label>
+                    <mat-select formControlName="marca">
+                        <mat-option *ngFor="let marca of marcas" [value]="marca.id">{{marca.nombre}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Modelo</mat-label>
+                    <input matInput formControlName="modelo" maxlength="50">
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Precio</mat-label>
+                    <input matInput formControlName="precio" maxlength="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </mat-form-field>
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Año</mat-label>
+                    <input matInput formControlName="annio" maxlength="4" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Kilometraje</mat-label>
+                    <input matInput formControlName="kilometraje" maxlength="6" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <button mat-raised-button class="btn btn-primary" type="submit">Guardar</button>
+                <button mat-raised-button class="btn btn-warning ms-2" routerLink="/dashboard/vehiculos">Volver</button>
+            </div>
+        </form>
     </div>
     <div *ngIf="submitted && createVehiculo.invalid" class="p-3 text-white bg-danger border border-danger-subtle rounded-3 mt-4">
-      Debe ingresar correctamente los datos solicitados.
-  </div>
-  </div>
-  
-  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#0C3B81" type = "ball-scale-pulse" [fullScreen] = "true">
-    <p style="color: white" > CARGANDO... </p>
-  </ngx-spinner>
-  
-    
+        Debe ingresar correctamente los datos solicitados.
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#0C3B81" type="ball-scale-pulse" [fullScreen]="true">
+    <p style="color: white"> CARGANDO... </p>
+</ngx-spinner>

@@ -59,4 +59,26 @@ export class VehiculoService {
   actualizarVehiculo(id:string, data:any):Promise<any>{
     return this.firestore.collection('vehiculo').doc(id).update(data);
   }
+  verificarPatenteExistente(patente: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      const nombreUpperCase = patente.toUpperCase();
+      this.firestore
+        .collection('vehiculo', (ref) => ref.where('patente', '==', nombreUpperCase))
+        .get()
+        .toPromise()
+        .then((snapshot) => {
+          if (snapshot && snapshot.empty) {
+            // No se encontraron patentes con el mismo nombre
+            resolve(false);
+          } else {
+            // Se encontró al menos una patente con el mismo nombre
+            resolve(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  }
 }

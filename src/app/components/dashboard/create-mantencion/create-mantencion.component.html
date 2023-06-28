@@ -1,95 +1,92 @@
 <div class="mt-4 col-md-6 offset-md-3">
     <div class="col">
-      <h1>{{titulo}}mantencion
-      </h1>
+        <h1>{{titulo}}mantencion
+        </h1>
     </div>
     <div class="row">
-      <form [formGroup]="createMantencion" (ngSubmit)="agregarEditar()">
-        <div class="col">  
-          <mat-form-field style="width: 50%;">
-            <mat-label>Vehiculo</mat-label >
-            <mat-select formControlName="vehiculo">
-              <mat-option *ngFor="let vehiculo of vehiculos" [value]="vehiculo.id">{{ vehiculo.patente }} - {{ getMarcaNombre(vehiculo.marca) }} {{ vehiculo.modelo }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field style="width: 50%;">
-            <mat-label>Fecha</mat-label>
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <input matInput [matDatepicker]="picker" formControlName="fecha">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="col">
-            <mat-radio-group aria-label="Select an option" style="width: 50%;">
-                <mat-radio-button value="1" (change)="mostrarLegal()" id="legal" name="mantencion">Mantencion Legal</mat-radio-button>
-                <br>
-                <mat-radio-button value="2" (change)="mostrarPrev()" id="prev" name="mantencion">Mantencion Preventiva</mat-radio-button>
-            </mat-radio-group>
+        <form [formGroup]="createMantencion" (ngSubmit)="agregarEditar()">
+            <div class="col">
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Vehiculo</mat-label>
+                    <mat-select formControlName="vehiculo">
+                        <mat-option *ngFor="let vehiculo of vehiculos" [value]="vehiculo.id">{{ vehiculo.patente }} - {{ getMarcaNombre(vehiculo.marca) }} {{ vehiculo.modelo }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Fecha</mat-label>
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <input matInput [matDatepicker]="picker" formControlName="fecha">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-radio-group aria-label="Select an option" style="width: 50%;">
+                    <mat-radio-button value="1" (change)="mostrarLegal()" id="legal" name="mantencion">Mantencion Legal</mat-radio-button>
+                    <br>
+                    <mat-radio-button value="2" (change)="mostrarPrev()" id="prev" name="mantencion">Mantencion Preventiva</mat-radio-button>
+                </mat-radio-group>
 
-        </div>
-        <div class="col">
-            <mat-form-field style="width: 50%;" *ngIf="mostrarTipoPrev">
-                <mat-label>Mantencion preventiva</mat-label >
-                <mat-select formControlName="tipoMantencionPreventiva">
-                  <mat-option *ngFor="let tipoP of tipoPrev" [value]="tipoP.id">{{ tipoP.nombre }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field style="width: 50%;" *ngIf="mostrarTipoLegal">
-                <mat-label>Mantencion legal</mat-label >
-                <mat-select formControlName="tipoMantencionPreventiva">
-                  <mat-option *ngFor="let tipoL of tipoLegal" [value]="tipoL.id">{{ tipoL.nombre }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-        </div>
-        <div class="col">
-            <mat-form-field style="width: 50%;">
-                <mat-label>Costo</mat-label >
-                <input matInput formControlName="costo" maxlength="50">
-              </mat-form-field>
-              <mat-form-field style="width: 50%;">
-                <mat-label>Encargado</mat-label >
-                <mat-select formControlName="mecanico">
-                  <mat-option *ngFor="let mecanico of mecanicos" [value]="mecanico.id">{{ mecanico.nombre }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-        </div>
-        <div class="col">
-              <mat-form-field class="example-full-width" style="width: 100%;">
-                <mat-label>Descripcion</mat-label>
-                <textarea matInput formControlName="descripcion"></textarea>
-              </mat-form-field>
-        </div>
-        <div class="col">
-            <div class="row">
-                <div class="col" *ngIf="mostrarTipoPrev">
-                    <mat-slide-toggle (change)="mostrarProximaFecha()"> ¿Desea agregar una fecha para la próxima mantención? </mat-slide-toggle>
-                </div>
-                <div class="col" *ngIf="mostrarProxFecha" style="width: 50%;">
-                    <mat-form-field >
-                        <mat-label>Fecha</mat-label>
-                        <mat-hint>MM/DD/YYYY</mat-hint>
-                        <input matInput [matDatepicker]="picker" formControlName="fechaProxMantencion">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                      </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field style="width: 50%;" *ngIf="mostrarTipoPrev">
+                    <mat-label>Mantencion preventiva</mat-label>
+                    <mat-select formControlName="tipoMantencionPreventiva">
+                        <mat-option *ngFor="let tipoP of tipoPrev" [value]="tipoP.id">{{ tipoP.nombre }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 50%;" *ngIf="mostrarTipoLegal">
+                    <mat-label>Mantencion legal</mat-label>
+                    <mat-select formControlName="tipoMantencionPreventiva">
+                        <mat-option *ngFor="let tipoL of tipoLegal" [value]="tipoL.id">{{ tipoL.nombre }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Costo</mat-label>
+                    <input matInput formControlName="costo" maxlength="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                </mat-form-field>
+                <mat-form-field style="width: 50%;">
+                    <mat-label>Encargado</mat-label>
+                    <mat-select formControlName="mecanico">
+                        <mat-option *ngFor="let mecanico of mecanicos" [value]="mecanico.id">{{ mecanico.nombre }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="example-full-width" style="width: 100%;">
+                    <mat-label>Descripcion</mat-label>
+                    <textarea matInput formControlName="descripcion"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col" *ngIf="mostrarTipoPrev">
+                        <mat-slide-toggle (change)="mostrarProximaFecha()"> ¿Desea agregar una fecha para la próxima mantención? </mat-slide-toggle>
+                    </div>
+                    <div class="col" *ngIf="mostrarProxFecha" style="width: 50%;">
+                        <mat-form-field>
+                            <mat-label>Fecha</mat-label>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <input matInput [matDatepicker]="picker" formControlName="fechaProxMantencion">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col mt-4">
-          <button mat-raised-button class="btn btn-primary" type="submit">Guardar</button>
-          <button mat-raised-button class="btn btn-warning ms-2" routerLink="/dashboard/mantenciones">Volver</button>
-        </div>
-      </form>
+            <div class="col mt-4">
+                <button mat-raised-button class="btn btn-primary" type="submit">Guardar</button>
+                <button mat-raised-button class="btn btn-warning ms-2" routerLink="/dashboard/mantenciones">Volver</button>
+            </div>
+        </form>
     </div>
     <div *ngIf="submitted && createMantencion.invalid" class="p-3 text-white bg-danger border border-danger-subtle rounded-3 mt-4">
-      Debe ingresar correctamente los datos solicitados.
-  </div>
-  </div>
-  
-  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#0C3B81" type = "ball-scale-pulse" [fullScreen] = "true">
-    <p style="color: white" > CARGANDO... </p>
-  </ngx-spinner>
-  
-    
+        Debe ingresar correctamente los datos solicitados.
+    </div>
+</div>
 
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#0C3B81" type="ball-scale-pulse" [fullScreen]="true">
+    <p style="color: white"> CARGANDO... </p>
+</ngx-spinner>

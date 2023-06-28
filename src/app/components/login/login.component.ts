@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
       if(user.user?.emailVerified){
         this.router.navigate(['/dashboard']);
         this.toastr.success('Bienvenido','',{
-          positionClass: 'toast-bottom-right'
+          positionClass: 'toast-top-right'
         });
         return;
       }else{
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     }).catch((error)=>{
       this.loading = false;
       this.toastr.error(this.firebaseError.codeError(error.code),'',{
-        positionClass: 'toast-bottom-right'
+        positionClass: 'toast-top-right'
       });
     })
   }

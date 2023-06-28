@@ -56,28 +56,59 @@ export class CreateTipoVehiculoComponent implements OnInit {
     
     this._tipoVehiculoService.actualizarTipoVehiculo(id, tipoVehiculo).then(()=>{
       this.spinner.hide();
-      this.toastr.info('El tipo fue modificado con exito!', 'Tipo modificada',{positionClass: 'toast-bottom-right'});
+      this.toastr.info('El tipo fue modificado con exito!', 'Tipo modificada',{positionClass: 'toast-top-right'});
       this.router.navigate(['/dashboard/tipo-vehiculos']);
     })
   }
 
-  agregarTipoVehiculo(){
-    const tipoVehiculo:any={
-      nombre: this.createTipoVehiculo.value.nombre,
-      fechaCreacion: new Date(),
-      fechaActualizacion: new Date(),
-    }
-    this.spinner.show();
-    this._tipoVehiculoService.agregarTipoVehiculo(tipoVehiculo).then(()=>{
-      console.log('Tipo creado con exito');
-      this.toastr.success('El tipo fue registrada con exito!', 'Tipo registrada',{positionClass: 'toast-bottom-right'});
+  // agregarTipoVehiculo(){
+  //   const nombreTipoVehiculo = this.createTipoVehiculo.value.nombre;
+  //   const tipoVehiculo:any={
+  //     nombre: nombreTipoVehiculo.toLowerCase().charAt(0).toUpperCase() + nombreTipoVehiculo.toLowerCase().slice(1),
+  //     fechaCreacion: new Date(),
+  //     fechaActualizacion: new Date(),
+  //   }
+  //   this.spinner.show();
+  //   this._tipoVehiculoService.agregarTipoVehiculo(tipoVehiculo).then(()=>{
+  //     console.log('Tipo creado con exito');
+  //     this.toastr.success('El tipo fue registrada con exito!', 'Tipo registrada',{positionClass: 'toast-top-right'});
+  //     this.spinner.hide();
+  //     this.router.navigate(['/dashboard/tipo-vehiculos']);
+  //   }).catch(error=>{
+  //     console.log(error);
+  //     this.spinner.hide();
+  //   })
+  // }
+  agregarTipoVehiculo() {
+    const nombreTipoVehiculo = this.createTipoVehiculo.value.nombre.toUpperCase();
+    
+    // Verificar si el nombre del tipo de vehículo ya existe
+    this._tipoVehiculoService.verificarNombreTipoVehiculo(nombreTipoVehiculo).then((existe) => {
+    if (existe) {
+      //El tipo de vehículo ya existe, no se puede guardar
+      this.toastr.error('El tipo de vehículo ya existe', 'Error', { positionClass: 'toast-top-right' });
+      return;
+    }else{
+      //el tipo de vehículo existe, se puede guardar
+      const tipoVehiculo: any = {
+        nombre:  nombreTipoVehiculo.toLowerCase().charAt(0).toUpperCase() + nombreTipoVehiculo.toLowerCase().slice(1),
+        fechaCreacion: new Date(),
+        fechaActualizacion: new Date(),
+      };
+      this.spinner.show();
+    
+    this._tipoVehiculoService.agregarTipoVehiculo(tipoVehiculo).then(() => {
+      console.log('Tipo creado con éxito');
+      this.toastr.success('El tipo fue registrado con éxito!', 'Tipo registrado', { positionClass: 'toast-top-right' });
       this.spinner.hide();
       this.router.navigate(['/dashboard/tipo-vehiculos']);
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error);
       this.spinner.hide();
-    })
+    });
   }
+  });
+}
 
   esEditar(){
     if(this.id !== null){

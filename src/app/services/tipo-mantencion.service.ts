@@ -30,6 +30,10 @@ export class TipoMantencionService {
       })
     )
   }
+  // getTipoMantenciones(): Observable<any>{
+  //   return this.firestore.collection('tipoMantencionPreventiva',ref => ref.orderBy('fechaCreacion','asc')).snapshotChanges(); 
+  //  }
+
   //eliminar
   eliminarTipoMantencion(id:string):Promise<any>{
     return this.firestore.collection('tipoMantencionPreventiva').doc(id).delete();
@@ -41,5 +45,50 @@ export class TipoMantencionService {
   }
   actualizarTipoMantencion(id:string, data:any):Promise<any>{
     return this.firestore.collection('tipoMantencionPreventiva').doc(id).update(data);
+  }
+  // verificarNombreTipoMantencion(nombre:string):Promise<boolean> {
+  //   const nombreTipoMantencion = nombre.toLowerCase().charAt(0).toUpperCase() + nombre.toLowerCase().slice(1);
+  //   return new Promise<boolean>((resolve, reject) => {
+  //     this.firestore
+  //       .collection('tipoMantencionPreventiva', (ref) => ref.where('nombre', '==', nombreTipoMantencion))
+  //       .get()
+  //       .toPromise()
+  //       .then((snapshot) => {
+  //         if (snapshot && snapshot.empty) {
+  //           // No se encontraron tipos de mantención con el mismo nombre
+  //           resolve(false);
+  //         } else {
+  //           // Se encontró al menos una con el mismo nombre
+  //           resolve(true);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         reject(error);
+  //       });
+  //   });
+  // }
+  verificarNombreTipoMantencion(nombre:string):Promise<boolean> {
+    const nombreTipoMantencion = nombre.toLowerCase().charAt(0).toUpperCase() + nombre.toLowerCase().slice(1);
+  
+    return new Promise<boolean>((resolve, reject) => {
+      this.firestore
+        .collection('tipoMantencionPreventiva', (ref) => ref.where('nombre', '==', nombreTipoMantencion))
+        .get()
+        .toPromise()
+        .then((snapshot) => {
+          if (snapshot && snapshot.empty) {
+            // No se encontraron tipos de mantención con el mismo nombre
+            resolve(false);
+          } else {
+            // Se encontró al menos una con el mismo nombre
+            resolve(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
   }
 }
