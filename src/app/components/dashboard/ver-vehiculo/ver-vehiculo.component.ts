@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2' 
 @Component({
   selector: 'app-ver-vehiculo',
   templateUrl: './ver-vehiculo.component.html',
