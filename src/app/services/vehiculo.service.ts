@@ -31,19 +31,9 @@ export class VehiculoService {
         })
       )
     }
-    //fk
+  //fk
   getMarcas(): Observable<any>{
-    return this.afAuth.authState.pipe(
-      filter(user=>!!user),
-      take(1),
-      switchMap(user=>{
-        const uid=user?.uid;
-        const queryFn:QueryFn=ref=>ref
-        .where('userId','==',uid)
-        .orderBy('fechaCreacion','asc');
-        return this.firestore.collection('marcas',queryFn).snapshotChanges();
-      })
-    )
+    return this.firestore.collection('marcas').snapshotChanges();
   }
   getTipos(): Observable<any>{
     return this.firestore.collection('tipoVehiculo').snapshotChanges(); 

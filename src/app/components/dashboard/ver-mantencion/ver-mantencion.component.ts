@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ver-mantencion',
@@ -120,13 +121,30 @@ export class VerMantencionComponent implements OnInit {
     return tipoL ? tipoL.nombre : '';
   }
 
-  eliminarMantencion(id:string){
-    this._mantencionService.eliminarMantencion(id).then(()=>{
-      console.log('Mantencion eliminada con exito');
-      this.toastr.success('La mantencion fue eliminada con exito!', 'Mantencion eliminada',{positionClass: 'toast-top-right'});
-    }).catch(error=>{
-      console.log(error);
-    })
+  eliminarMantencion(id: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._mantencionService.eliminarMantencion(id).then(() => {
+          console.log('Mantención eliminada con éxito');
+          this.toastr.error('¡La mantención fue eliminada con éxito!', 'Mantención eliminada', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
+          console.log(error);
+        });
+        Swal.fire(
+          '¡Eliminado!',
+          'La mantención ha sido eliminada.',
+          'success'
+        );
+      }
+    });
   }
 
 }

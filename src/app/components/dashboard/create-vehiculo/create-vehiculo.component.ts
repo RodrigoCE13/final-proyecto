@@ -70,6 +70,7 @@ export class CreateVehiculoComponent implements OnInit {
     if(this.createVehiculo.invalid){
       return
     }
+    
     if(this.id==null){
       this.agregarVehiculo();
     }else{
