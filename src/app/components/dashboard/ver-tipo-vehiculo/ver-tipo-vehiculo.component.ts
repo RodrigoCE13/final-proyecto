@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ver-tipo-vehiculo',
@@ -47,13 +48,26 @@ export class VerTipoVehiculoComponent implements OnInit {
       this.dataSource.data = this.tiposVehiculo;
     });
   }
-  eliminarTiposVehiculo(id:string){
-    this._tipoVehiculoService.eliminarTipoVehiculo(id).then(()=>{
-      console.log('Tipo eliminada con exito');
-      this.toastr.error('El tipo fue eliminado con exito!', 'Tipo eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
-      console.log(error);
-    })
-  }
+  eliminarTiposVehiculo(id: string) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Deseas eliminar este tipo de vehículo?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this._tipoVehiculoService.eliminarTipoVehiculo(id).then(() => {
+                console.log('Tipo eliminado con éxito');
+                this.toastr.error('El tipo fue eliminado con éxito!', 'Tipo eliminado', {
+                    positionClass: 'toast-bottom-right'
+                });
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    });
+}
 
 }

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import Swal from 'sweetalert2'
 
 
 @Component({
@@ -49,13 +50,30 @@ export class VerMecanicosComponent implements OnInit {
       this.dataSource.data = this.mecanicos;
     });
   }
-  eliminarMecanico(id:string){//<-- Metodo para eliminar un mecanico
-    this._mecanicoService.eliminarMecanico(id).then(()=>{//<-- Llamamos al metodo eliminarMecanico del servicio y le pasamos el id del mecanico
-      console.log('Mecanico eliminado con exito');
-      this.toastr.error('El mecanico fue eliminado con exito!', 'Mecanico eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
-      console.log(error);
-    })
+  eliminarMecanico(id: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._mecanicoService.eliminarMecanico(id).then(() => {
+          console.log('Mecánico eliminado con éxito');
+          this.toastr.error('¡El mecánico fue eliminado con éxito!', 'Mecánico eliminado', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
+          console.log(error);
+        });
+        Swal.fire(
+          '¡Eliminado!',
+          'Tu archivo ha sido eliminado.',
+          'success'
+        );
+      }
+    });
   }
 
 }

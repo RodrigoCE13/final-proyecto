@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-navbar',
@@ -27,7 +28,20 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  logout(){
-    this.afAuth.signOut().then(()=>this.router.navigate(['/login']));//<-- Cerramos sesion y redireccionamos al login
-  }
+  logout() {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Deseas cerrar sesión?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.afAuth.signOut().then(() => {
+                this.router.navigate(['/login']);
+            });
+        }
+    });
+}
 }

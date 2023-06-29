@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ver-marca',
@@ -48,12 +49,29 @@ export class VerMarcaComponent implements OnInit {
       this.dataSource.data = this.marcas;
     });
   }
-  eliminarMarca(id:string){
-    this._marcaService.eliminarMarca(id).then(()=>{
-      console.log('Marca eliminada con exito');
-      this.toastr.success('La marca fue eliminads con exito!', 'Marca eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
-      console.log(error);
-    })
+  eliminarMarca(id: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._marcaService.eliminarMarca(id).then(() => {
+          console.log('Marca eliminada con éxito');
+          this.toastr.success('¡La marca fue eliminada con éxito!', 'Marca eliminada', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
+          console.log(error);
+        });
+        Swal.fire(
+          '¡Eliminado!',
+          'La marca ha sido eliminada.',
+          'success'
+        );
+      }
+    });
   }
 }

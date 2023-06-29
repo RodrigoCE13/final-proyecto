@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ver-vehiculo',
@@ -85,11 +86,28 @@ export class VerVehiculoComponent implements OnInit {
   }
 
   eliminarVehiculo(id:string){
-    this._vehiculoServices.eliminarVehiculo(id).then(()=>{
-      console.log('Vehiculo eliminado con exito');
-      this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
-      console.log(error);
-    })
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._vehiculoServices.eliminarVehiculo(id).then(()=>{
+          console.log('Vehiculo eliminado con exito');
+          this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-bottom-right'});
+        }).catch(error=>{
+          console.log(error);
+        });
+        Swal.fire(
+          '¡Eliminado!',
+          'La marca ha sido eliminada.',
+          'success'
+        );
+      }
+    });
   }
 }

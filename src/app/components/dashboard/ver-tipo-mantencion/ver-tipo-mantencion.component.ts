@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ver-tipo-mantencion',
@@ -47,13 +48,30 @@ export class VerTipoMantencionComponent implements OnInit {
       this.dataSource.data = this.tiposMantencion;
     });
   }
-  eliminarTiposMantencion(id:string){
-    this._tipoMantencionService.eliminarTipoMantencion(id).then(()=>{
-      console.log('Tipo eliminada con exito');
-      this.toastr.error('El tipo fue eliminado con exito!', 'Tipo eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
-      console.log(error);
-    })
+  eliminarTiposMantencion(id: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._tipoMantencionService.eliminarTipoMantencion(id).then(() => {
+          console.log('Tipo eliminado con éxito');
+          this.toastr.error('¡El tipo fue eliminado con éxito!', 'Tipo eliminado', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
+          console.log(error);
+        });
+        Swal.fire(
+          '¡Eliminado!',
+          'El tipo ha sido eliminado.',
+          'success'
+        );
+      }
+    });
   }
 
 }

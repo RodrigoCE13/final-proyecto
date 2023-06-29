@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NgxSpinnerService } from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-marca',
@@ -41,6 +42,7 @@ export class CreateMarcaComponent implements OnInit {
     if(this.createMarca.invalid){
       return
     }
+    
     if(this.id==null){
       this.agregarMarca();
     }else{
