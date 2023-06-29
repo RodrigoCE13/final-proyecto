@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
+import { MantencionService } from 'src/app/services/mantencion.service';
 import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ver-vehiculo',
@@ -23,6 +23,7 @@ export class VerVehiculoComponent implements OnInit {
   constructor(
     private _vehiculoServices: VehiculoService,
     private toastr: ToastrService,
+    private _mantencionServices: MantencionService
   ) { }
 
   ngOnInit(): void {
@@ -85,29 +86,31 @@ export class VerVehiculoComponent implements OnInit {
     return tipo ? tipo.nombre : '';
   }
 
-  eliminarVehiculo(id:string){
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: '¡No podrás revertir esto!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._vehiculoServices.eliminarVehiculo(id).then(()=>{
-          console.log('Vehiculo eliminado con exito');
-          this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-bottom-right'});
-        }).catch(error=>{
+  //eliminarVehiculo(id:string){
+  //  this._vehiculoServices.eliminarVehiculo(id).then(()=>{
+  //    console.log('Vehiculo eliminado con exito');
+  //    this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-bottom-right'});
+  //  }).catch(error=>{
+  //    console.log(error);
+  //  })
+  //}
+  eliminarVehiculo(id: string) {
+    // Verificar si el vehículo tiene mantenimientos asociados
+    this._mantencionServices.verificarMantencionesAsociadas(id).then(tieneMantenciones => {
+      if (tieneMantenciones) {
+        console.log('No se puede eliminar el vehículo porque tiene mantenimientos asociados.');
+        this.toastr.error('El vehículo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+      } else {
+        // Eliminar el vehículo
+        this._vehiculoServices.eliminarVehiculo(id).then(() => {
+          console.log('Vehículo eliminado con éxito');
+          this.toastr.info('El vehículo fue eliminado con éxito!', 'Vehículo eliminado', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
           console.log(error);
         });
-        Swal.fire(
-          '¡Eliminado!',
-          'La marca ha sido eliminada.',
-          'success'
-        );
       }
+    }).catch(error => {
+      console.log(error);
     });
   }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MecanicoService } from 'src/app/services/mecanico.service';
+import { MantencionService } from 'src/app/services/mantencion.service';
 import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import Swal from 'sweetalert2'
 
 
 @Component({
@@ -22,6 +22,7 @@ export class VerMecanicosComponent implements OnInit {
   constructor(
     private _mecanicoService: MecanicoService,//<-- Agregamos el servicio (los servicios llevan el guion bajo)
     private toastr: ToastrService,
+    private _mantencionServices: MantencionService
   ) { }
 
   ngOnInit(): void {
@@ -50,29 +51,25 @@ export class VerMecanicosComponent implements OnInit {
       this.dataSource.data = this.mecanicos;
     });
   }
+
   eliminarMecanico(id: string) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: '¡No podrás revertir esto!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo'
-    }).then((result) => {
-      if (result.isConfirmed) {
+    // Verificar si el tipo de mantenimiento tiene mantenciones asociadas
+    this._mantencionServices.verificarMecanicoAsociadas(id).then(tieneMantenciones => {
+      if (tieneMantenciones) {
+        console.log('No se puede eliminar el mecanico porque tiene mantenciones asociadas.');
+        this.toastr.error('El mecanico que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+      } else {
+        
+        // Eliminar el tipo de mantenimiento
         this._mecanicoService.eliminarMecanico(id).then(() => {
-          console.log('Mecánico eliminado con éxito');
-          this.toastr.error('¡El mecánico fue eliminado con éxito!', 'Mecánico eliminado', { positionClass: 'toast-bottom-right' });
+          console.log('Mecanico eliminado con éxito');
+          this.toastr.info('El mecanico fue eliminado con éxito!', 'Mecanico eliminado', { positionClass: 'toast-bottom-right' });
         }).catch(error => {
           console.log(error);
         });
-        Swal.fire(
-          '¡Eliminado!',
-          'Tu archivo ha sido eliminado.',
-          'success'
-        );
       }
+    }).catch(error => {
+      console.log(error);
     });
   }
 
