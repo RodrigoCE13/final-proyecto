@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore,QueryFn } from '@angular/fire/compat/firestore';
+import { AngularFirestore,QueryFn,DocumentChangeAction  } from '@angular/fire/compat/firestore';
 import { Observable, filter,take, switchMap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +123,73 @@ export class MantencionService {
           return this.firestore.collection('mantencion', queryFn).snapshotChanges();
         })
       );
+    }
+
+    verificarMantencionesAsociadas(vehiculoId: string): Promise<boolean> {
+      const queryFn: QueryFn<any> = ref => ref.where('vehiculo', '==', vehiculoId).limit(1);
+    
+      return new Promise<boolean>((resolve, reject) => {
+        this.firestore.collection('mantencion', queryFn)
+          .valueChanges()
+          .pipe(
+            take(1),
+            map((mantenciones: any[]) => {
+              return mantenciones.length > 0;
+            })
+          )
+          .subscribe(
+            (result: boolean) => {
+              resolve(result);
+            },
+            (error: any) => {
+              reject(error);
+            }
+          );
+      });
+    }
+    verificarTipoAsociadas(tipoId: string): Promise<boolean> {
+      const queryFn: QueryFn<any> = ref => ref.where('tipoMantencionPreventiva', '==', tipoId).limit(1);
+    
+      return new Promise<boolean>((resolve, reject) => {
+        this.firestore.collection('mantencion', queryFn)
+          .valueChanges()
+          .pipe(
+            take(1),
+            map((mantenciones: any[]) => {
+              return mantenciones.length > 0;
+            })
+          )
+          .subscribe(
+            (result: boolean) => {
+              resolve(result);
+            },
+            (error: any) => {
+              reject(error);
+            }
+          );
+      });
+    }
+    verificarMecanicoAsociadas(mecanicoId: string): Promise<boolean> {
+      const queryFn: QueryFn<any> = ref => ref.where('mecanico', '==', mecanicoId).limit(1);
+    
+      return new Promise<boolean>((resolve, reject) => {
+        this.firestore.collection('mantencion', queryFn)
+          .valueChanges()
+          .pipe(
+            take(1),
+            map((mantenciones: any[]) => {
+              return mantenciones.length > 0;
+            })
+          )
+          .subscribe(
+            (result: boolean) => {
+              resolve(result);
+            },
+            (error: any) => {
+              reject(error);
+            }
+          );
+      });
     }
     
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TipoMantencionService } from 'src/app/services/tipo-mantencion.service';
+import { MantencionService } from 'src/app/services/mantencion.service';
 import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,6 +21,7 @@ export class VerTipoMantencionComponent implements OnInit {
   constructor(
     private _tipoMantencionService: TipoMantencionService,
     private toastr: ToastrService,
+    private _mantencionServices: MantencionService
   ) { }
 
   ngOnInit(): void {
@@ -47,13 +49,25 @@ export class VerTipoMantencionComponent implements OnInit {
       this.dataSource.data = this.tiposMantencion;
     });
   }
-  eliminarTiposMantencion(id:string){
-    this._tipoMantencionService.eliminarTipoMantencion(id).then(()=>{
-      console.log('Tipo eliminada con exito');
-      this.toastr.error('El tipo fue eliminado con exito!', 'Tipo eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
+  eliminarTiposMantencion(id: string) {
+    // Verificar si el tipo de mantenimiento tiene mantenciones asociadas
+    this._mantencionServices.verificarTipoAsociadas(id).then(tieneMantenciones => {
+      if (tieneMantenciones) {
+        console.log('No se puede eliminar el tipo porque tiene mantenciones asociadas.');
+        this.toastr.error('El tipo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+      } else {
+        // Eliminar el tipo de mantenimiento
+        this._tipoMantencionService.eliminarTipoMantencion(id).then(() => {
+          console.log('Tipo eliminado con éxito');
+          this.toastr.info('El tipo fue eliminado con éxito!', 'Tipo eliminado', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
+          console.log(error);
+        });
+      }
+    }).catch(error => {
       console.log(error);
-    })
+    });
   }
+  
 
 }

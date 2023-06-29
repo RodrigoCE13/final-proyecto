@@ -15,6 +15,7 @@ import { RegistrarUsuarioComponent } from './components/registrar-usuario/regist
 import { RecuperarPasswordComponent } from './components/recuperar-password/recuperar-password.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 
@@ -34,7 +35,13 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     AngularFirestoreModule,
     ToastrModule.forRoot(), // ToastrModule added
     CollapseModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

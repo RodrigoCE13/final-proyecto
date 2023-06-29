@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MecanicoService } from 'src/app/services/mecanico.service';
+import { MantencionService } from 'src/app/services/mantencion.service';
 import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,6 +22,7 @@ export class VerMecanicosComponent implements OnInit {
   constructor(
     private _mecanicoService: MecanicoService,//<-- Agregamos el servicio (los servicios llevan el guion bajo)
     private toastr: ToastrService,
+    private _mantencionServices: MantencionService
   ) { }
 
   ngOnInit(): void {
@@ -49,13 +51,25 @@ export class VerMecanicosComponent implements OnInit {
       this.dataSource.data = this.mecanicos;
     });
   }
-  eliminarMecanico(id:string){//<-- Metodo para eliminar un mecanico
-    this._mecanicoService.eliminarMecanico(id).then(()=>{//<-- Llamamos al metodo eliminarMecanico del servicio y le pasamos el id del mecanico
-      console.log('Mecanico eliminado con exito');
-      this.toastr.error('El mecanico fue eliminado con exito!', 'Mecanico eliminado',{positionClass: 'toast-bottom-right'});
-    }).catch(error=>{
+
+  eliminarMecanico(id: string) {
+    // Verificar si el tipo de mantenimiento tiene mantenciones asociadas
+    this._mantencionServices.verificarMecanicoAsociadas(id).then(tieneMantenciones => {
+      if (tieneMantenciones) {
+        console.log('No se puede eliminar el mecanico porque tiene mantenciones asociadas.');
+        this.toastr.error('El mecanico que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+      } else {
+        // Eliminar el tipo de mantenimiento
+        this._mecanicoService.eliminarMecanico(id).then(() => {
+          console.log('Mecanico eliminado con éxito');
+          this.toastr.info('El mecanico fue eliminado con éxito!', 'Mecanico eliminado', { positionClass: 'toast-bottom-right' });
+        }).catch(error => {
+          console.log(error);
+        });
+      }
+    }).catch(error => {
       console.log(error);
-    })
+    });
   }
 
 }
