@@ -53,28 +53,6 @@ export class CreateMecanicoComponent implements OnInit {
     }
   }
 
-  // editarMecanico( id:string ){
-    
-  //   const mecanico:any={//<-- Creamos un objeto con los datos del formulario
-  //     nombre: this.createMecanico.value.nombre,
-  //     fono: this.createMecanico.value.fono,
-  //     direccion: this.createMecanico.value.direccion,
-  //     tipoMecanico: this.createMecanico.value.tipoMecanico,
-  //     fechaActualizacion: new Date(),
-  //   }
-  //   this.spinner.show();
-  //   this.afAuth.currentUser.then(user=>{
-  //     if(user){
-  //       mecanico.userId=user.uid;
-  //     }
-
-  //     this._mecanicoService.actualizarMecanico(id, mecanico).then(()=>{
-  //       this.spinner.hide();
-  //      this.toastr.info('El mecanico fue modificado con exito!', 'Mecanico modificado',{positionClass: 'toast-top-right'});
-  //      this.router.navigate(['/dashboard/mecanicos']);
-  //     })
-  //   })
-  // }
   editarMecanico(id: string) {
     const mecanico: any = {
       nombre: this.createMecanico.value.nombre,
@@ -111,11 +89,92 @@ export class CreateMecanicoComponent implements OnInit {
       });
     });
   }
+
+  esEditar(){
+    if(this.id !== null){
+      this.titulo='Editar ';
+      this.spinner.show();
+      this._mecanicoService.getMecanico(this.id).subscribe(data=>{
+        this.spinner.hide();
+        console.log(data.payload.data()['nombre']);
+        this.createMecanico.setValue({
+          nombre: data.payload.data()['nombre'],
+          fono: data.payload.data()['fono'],
+          direccion: data.payload.data()['direccion'],
+          tipoMecanico: data.payload.data()['tipoMecanico'],
+        })
+      })
+    }
+  }
+  // agregarMecanico() {
+  //   const telefono = this.createMecanico.value.fono;
+  //   if (telefono.length < 8) {
+  //     this.toastr.error('El número de teléfono es incorrecto.', 'Error');
+  //     return;
+  //   }
+  
+  //   const mecanico: any = {
+  //     nombre: this.createMecanico.value.nombre,
+  //     fono: this.formatoTelefono(telefono),
+  //     direccion: this.createMecanico.value.direccion,
+  //     fechaCreacion: new Date(),
+  //     fechaActualizacion: new Date(),
+  //     tipoMecanico: this.createMecanico.value.tipoMecanico,
+  //   };
+  //   this.spinner.show();
+  //   this.afAuth.currentUser.then(user => {
+  //     if (user) {
+  //       mecanico.userId = user.uid;
+  //     }
+  //     // Verificar si el número de teléfono ya existe para el usuario actual
+  //     this._mecanicoService.verificarNumeroMecanico(mecanico.fono).then(existeTelefono => {
+  //       if (existeTelefono) {
+  //         this.spinner.hide();
+  //         this.toastr.error('El número de teléfono ya está registrado.', 'Error');
+  //       } else {
+  //         this._mecanicoService.agregarMecanico(mecanico).then(() => {
+  //           console.log('Mecanico creado con éxito');
+  //           this.toastr.success('El mecánico fue registrado con éxito!', 'Mecánico registrado', { positionClass: 'toast-top-right' });
+  //           this.spinner.hide();
+  //           this.router.navigate(['/dashboard/mecanicos']);
+  //         }).catch(error => {
+  //           console.log(error);
+  //           this.spinner.hide();
+  //         });
+  //       }
+  //     }).catch(error => {
+  //       console.log(error);
+  //       this.spinner.hide();
+  //     });
+  //   });
+  // }
+  
+  // formatoTelefono(telefono: string): string {
+  //   let numeroFormateado = telefono.trim();
+  
+  //   // Agregar '56' al inicio si el número tiene 9 dígitos
+  //   if (numeroFormateado.length === 9) {
+  //     numeroFormateado = '56' + numeroFormateado;
+  //   }
+  
+  //   // Agregar '569' al inicio si el número tiene 8 dígitos
+  //   if (numeroFormateado.length === 8) {
+  //     numeroFormateado = '569' + numeroFormateado;
+  //   }
+  
+  //   return numeroFormateado;
+  // }
   
   agregarMecanico() {
+    const telefono = this.createMecanico.value.fono;
+    if (telefono.length < 8 || (telefono.length === 11 && !telefono.startsWith('569'))) {
+      this.toastr.error('El número de teléfono es incorrecto.', 'Error');
+      return;
+    }
+  
     const mecanico: any = {
       nombre: this.createMecanico.value.nombre,
-      fono: this.createMecanico.value.fono,
+      fono: this.formatoTelefono(telefono),
       direccion: this.createMecanico.value.direccion,
       fechaCreacion: new Date(),
       fechaActualizacion: new Date(),
@@ -126,7 +185,7 @@ export class CreateMecanicoComponent implements OnInit {
       if (user) {
         mecanico.userId = user.uid;
       }
-      // Verificar si el número de teléfono ya existe
+      // Verificar si el número de teléfono ya existe para el usuario actual
       this._mecanicoService.verificarNumeroMecanico(mecanico.fono).then(existeTelefono => {
         if (existeTelefono) {
           this.spinner.hide();
@@ -149,21 +208,75 @@ export class CreateMecanicoComponent implements OnInit {
     });
   }
   
-
-  esEditar(){
-    if(this.id !== null){
-      this.titulo='Editar ';
-      this.spinner.show();
-      this._mecanicoService.getMecanico(this.id).subscribe(data=>{
-        this.spinner.hide();
-        console.log(data.payload.data()['nombre']);
-        this.createMecanico.setValue({
-          nombre: data.payload.data()['nombre'],
-          fono: data.payload.data()['fono'],
-          direccion: data.payload.data()['direccion'],
-          tipoMecanico: data.payload.data()['tipoMecanico'],
-        })
-      })
+  formatoTelefono(telefono: string): string {
+    let numeroFormateado = telefono.trim();
+  
+    // Agregar '56' al inicio si el número tiene 9 dígitos
+    if (numeroFormateado.length === 9) {
+      numeroFormateado = '56' + numeroFormateado;
     }
+  
+    // Agregar '569' al inicio si el número tiene 8 dígitos
+    if (numeroFormateado.length === 8) {
+      numeroFormateado = '569' + numeroFormateado;
+    }
+  
+    return numeroFormateado;
   }
+  
+
+  // agregarMecanico() {
+  //   const mecanico: any = {
+  //     nombre: this.createMecanico.value.nombre,
+  //     fono: this.formatoTelefono(this.createMecanico.value.fono),
+  //     direccion: this.createMecanico.value.direccion,
+  //     fechaCreacion: new Date(),
+  //     fechaActualizacion: new Date(),
+  //     tipoMecanico: this.createMecanico.value.tipoMecanico,
+  //   };
+  //   this.spinner.show();
+  //   this.afAuth.currentUser.then(user => {
+  //     if (user) {
+  //       mecanico.userId = user.uid;
+  //     }
+  //     // Verificar si el número de teléfono ya existe para el usuario actual
+  //     this._mecanicoService.verificarNumeroMecanico(mecanico.fono).then(existeTelefono => {
+  //       if (existeTelefono) {
+  //         this.spinner.hide();
+  //         this.toastr.error('El número de teléfono ya está registrado.', 'Error');
+  //       } else {
+  //         this._mecanicoService.agregarMecanico(mecanico).then(() => {
+  //           console.log('Mecanico creado con éxito');
+  //           this.toastr.success('El mecánico fue registrado con éxito!', 'Mecánico registrado', { positionClass: 'toast-top-right' });
+  //           this.spinner.hide();
+  //           this.router.navigate(['/dashboard/mecanicos']);
+  //         }).catch(error => {
+  //           console.log(error);
+  //           this.spinner.hide();
+  //         });
+  //       }
+  //     }).catch(error => {
+  //       console.log(error);
+  //       this.spinner.hide();
+  //     });
+  //   });
+  // }
+  
+  // formatoTelefono(telefono: string): string {
+  //   let numeroFormateado = telefono.trim();
+  
+  //   // Agregar '56' al inicio si el número tiene 9 dígitos
+  //   if (numeroFormateado.length === 9) {
+  //     numeroFormateado = '56' + numeroFormateado;
+  //   }
+  
+  //   // Agregar '569' al inicio si el número tiene 8 dígitos
+  //   if (numeroFormateado.length === 8) {
+  //     numeroFormateado = '569' + numeroFormateado;
+  //   }
+  
+  //   return numeroFormateado;
+  // }
+  
+  
 }

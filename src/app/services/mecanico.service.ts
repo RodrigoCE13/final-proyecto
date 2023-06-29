@@ -42,27 +42,30 @@ export class MecanicoService {
   }
   verificarNumeroMecanico(fono: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const queryFn: QueryFn = ref => ref
-        .where('fono', '==', fono)
-        .limit(1);
-      
-      this.firestore.collection('mecanicos', queryFn).valueChanges({ idField: 'id' }).pipe(take(1)).subscribe(
-        (mecanicos) => {
-          if (mecanicos && mecanicos.length > 0) {
-            // Se encontró al menos un mecánico con el mismo fono
-            resolve(true);
-          } else {
-            // No se encontraron mecánicos con el mismo fono
-            resolve(false);
-          }
-        },
-        (error) => {
-          console.log(error);
-          reject(error);
+      this.afAuth.currentUser.then(user => {
+        if (user) {
+          const queryFn: QueryFn = ref => ref
+          .where('userId', '==', user.uid)
+            .where('fono', '==', fono)
+            .limit(1);
+          this.firestore.collection('mecanicos', queryFn).valueChanges({ idField: 'id' }).pipe(take(1)).subscribe(
+            (mecanicos) => {
+              if (mecanicos && mecanicos.length > 0) {
+                // Se encontró al menos un mecánico del usuario con el mismo fono
+                resolve(true);
+              } else {
+                // No se encontraron mecánicos del usuario con el mismo fono
+                resolve(false);
+              }
+            },
+            (error) => {
+              console.log(error);
+              reject(error);
+            }
+          );
         }
-      );
+      });
     });
   }
-  
   
 }
