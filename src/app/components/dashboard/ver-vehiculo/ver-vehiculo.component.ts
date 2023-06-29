@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-
+import Swal from 'sweetalert2'
 @Component({
   selector: 'app-ver-vehiculo',
   templateUrl: './ver-vehiculo.component.html',
@@ -101,12 +101,28 @@ export class VerVehiculoComponent implements OnInit {
         console.log('No se puede eliminar el vehículo porque tiene mantenimientos asociados.');
         this.toastr.error('El vehículo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
       } else {
-        // Eliminar el vehículo
-        this._vehiculoServices.eliminarVehiculo(id).then(() => {
-          console.log('Vehículo eliminado con éxito');
-          this.toastr.info('El vehículo fue eliminado con éxito!', 'Vehículo eliminado', { positionClass: 'toast-bottom-right' });
-        }).catch(error => {
-          console.log(error);
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._vehiculoServices.eliminarVehiculo(id).then(()=>{
+              console.log('Vehiculo eliminado con exito');
+              this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-bottom-right'});
+            }).catch(error=>{
+              console.log(error);
+            });
+            Swal.fire(
+              '¡Eliminado!',
+              'El vehiculo ha sido eliminada.',
+              'success'
+            );
+          }
         });
       }
     }).catch(error => {

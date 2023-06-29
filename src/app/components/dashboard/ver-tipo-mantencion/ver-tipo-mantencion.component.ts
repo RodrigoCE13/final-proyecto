@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-
+import Swal from 'sweetalert2'
 @Component({
   selector: 'app-ver-tipo-mantencion',
   templateUrl: './ver-tipo-mantencion.component.html',
@@ -56,12 +56,28 @@ export class VerTipoMantencionComponent implements OnInit {
         console.log('No se puede eliminar el tipo porque tiene mantenciones asociadas.');
         this.toastr.error('El tipo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
       } else {
-        // Eliminar el tipo de mantenimiento
-        this._tipoMantencionService.eliminarTipoMantencion(id).then(() => {
-          console.log('Tipo eliminado con éxito');
-          this.toastr.info('El tipo fue eliminado con éxito!', 'Tipo eliminado', { positionClass: 'toast-bottom-right' });
-        }).catch(error => {
-          console.log(error);
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._tipoMantencionService.eliminarTipoMantencion(id).then(() => {
+              console.log('Tipo eliminado con éxito');
+              this.toastr.error('¡El tipo fue eliminado con éxito!', 'Tipo eliminado', { positionClass: 'toast-bottom-right' });
+            }).catch(error => {
+              console.log(error);
+            });
+            Swal.fire(
+              '¡Eliminado!',
+              'El tipo ha sido eliminado.',
+              'success'
+            );
+          }
         });
       }
     }).catch(error => {

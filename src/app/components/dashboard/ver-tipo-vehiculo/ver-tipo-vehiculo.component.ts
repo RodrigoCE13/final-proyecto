@@ -66,6 +66,11 @@ export class VerTipoVehiculoComponent implements OnInit {
             }).catch((error) => {
                 console.log(error);
             });
+            Swal.fire(
+              '¡Eliminado!',
+              'El tipo ha sido eliminada.',
+              'success'
+            );
         }
     });
 }
