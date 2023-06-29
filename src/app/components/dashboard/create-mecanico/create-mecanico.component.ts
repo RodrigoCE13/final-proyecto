@@ -53,54 +53,102 @@ export class CreateMecanicoComponent implements OnInit {
     }
   }
 
-  editarMecanico( id:string ){
+  // editarMecanico( id:string ){
     
-    const mecanico:any={//<-- Creamos un objeto con los datos del formulario
+  //   const mecanico:any={//<-- Creamos un objeto con los datos del formulario
+  //     nombre: this.createMecanico.value.nombre,
+  //     fono: this.createMecanico.value.fono,
+  //     direccion: this.createMecanico.value.direccion,
+  //     tipoMecanico: this.createMecanico.value.tipoMecanico,
+  //     fechaActualizacion: new Date(),
+  //   }
+  //   this.spinner.show();
+  //   this.afAuth.currentUser.then(user=>{
+  //     if(user){
+  //       mecanico.userId=user.uid;
+  //     }
+
+  //     this._mecanicoService.actualizarMecanico(id, mecanico).then(()=>{
+  //       this.spinner.hide();
+  //      this.toastr.info('El mecanico fue modificado con exito!', 'Mecanico modificado',{positionClass: 'toast-top-right'});
+  //      this.router.navigate(['/dashboard/mecanicos']);
+  //     })
+  //   })
+  // }
+  editarMecanico(id: string) {
+    const mecanico: any = {
       nombre: this.createMecanico.value.nombre,
       fono: this.createMecanico.value.fono,
       direccion: this.createMecanico.value.direccion,
       tipoMecanico: this.createMecanico.value.tipoMecanico,
       fechaActualizacion: new Date(),
-    }
+    };
+  
     this.spinner.show();
-    this.afAuth.currentUser.then(user=>{
-      if(user){
-        mecanico.userId=user.uid;
+    this.afAuth.currentUser.then(user => {
+      if (user) {
+        mecanico.userId = user.uid;
       }
-
-      this._mecanicoService.actualizarMecanico(id, mecanico).then(()=>{
+  
+      // Verificar si el número de teléfono ya existe en otro mecánico
+      this._mecanicoService.verificarNumeroMecanico(mecanico.fono).then(existeTelefono => {
+        if (existeTelefono) {
+          this.spinner.hide();
+          this.toastr.error('El número de teléfono ya está registrado en otro mecánico.', 'Error');
+        } else {
+          this._mecanicoService.actualizarMecanico(id, mecanico).then(() => {
+            this.spinner.hide();
+            this.toastr.info('El mecánico fue modificado con éxito!', 'Mecánico modificado', { positionClass: 'toast-top-right' });
+            this.router.navigate(['/dashboard/mecanicos']);
+          }).catch(error => {
+            console.log(error);
+            this.spinner.hide();
+          });
+        }
+      }).catch(error => {
+        console.log(error);
         this.spinner.hide();
-       this.toastr.info('El mecanico fue modificado con exito!', 'Mecanico modificado',{positionClass: 'toast-top-right'});
-       this.router.navigate(['/dashboard/mecanicos']);
-      })
-    })
+      });
+    });
   }
-
-  agregarMecanico(){
-    const mecanico:any={//<-- Creamos un objeto con los datos del formulario
+  
+  agregarMecanico() {
+    const mecanico: any = {
       nombre: this.createMecanico.value.nombre,
       fono: this.createMecanico.value.fono,
       direccion: this.createMecanico.value.direccion,
-      fechaCreacion: new Date(),//<-- Agregamos la fecha de creacion y actualizacion para llevar un control de los datos
+      fechaCreacion: new Date(),
       fechaActualizacion: new Date(),
-      tipoMecanico:this.createMecanico.value.tipoMecanico,
-    }
+      tipoMecanico: this.createMecanico.value.tipoMecanico,
+    };
     this.spinner.show();
-    this.afAuth.currentUser.then(user=>{
-      if(user){
-        mecanico.userId=user.uid;
+    this.afAuth.currentUser.then(user => {
+      if (user) {
+        mecanico.userId = user.uid;
       }
-    this._mecanicoService.agregarMecanico(mecanico).then(()=>{//<-- Llamamos al metodo agregarMecanico del servicio y le pasamos el objeto mecanico
-      console.log('Mecanico creado con exito');
-      this.toastr.success('El mecanico fue registrado con exito!', 'Mecanico registrado',{positionClass: 'toast-top-right'});
-      this.spinner.hide();
-      this.router.navigate(['/dashboard/mecanicos']);
-    }).catch(error=>{
-      console.log(error);
-      this.spinner.hide();
-    })
-    })
+      // Verificar si el número de teléfono ya existe
+      this._mecanicoService.verificarNumeroMecanico(mecanico.fono).then(existeTelefono => {
+        if (existeTelefono) {
+          this.spinner.hide();
+          this.toastr.error('El número de teléfono ya está registrado.', 'Error');
+        } else {
+          this._mecanicoService.agregarMecanico(mecanico).then(() => {
+            console.log('Mecanico creado con éxito');
+            this.toastr.success('El mecánico fue registrado con éxito!', 'Mecánico registrado', { positionClass: 'toast-top-right' });
+            this.spinner.hide();
+            this.router.navigate(['/dashboard/mecanicos']);
+          }).catch(error => {
+            console.log(error);
+            this.spinner.hide();
+          });
+        }
+      }).catch(error => {
+        console.log(error);
+        this.spinner.hide();
+      });
+    });
   }
+  
 
   esEditar(){
     if(this.id !== null){

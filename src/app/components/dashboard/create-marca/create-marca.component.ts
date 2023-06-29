@@ -64,9 +64,7 @@ export class CreateMarcaComponent implements OnInit {
           fechaCreacion: new Date(),
           fechaActualizacion: new Date(),
         };
-  
         this.spinner.show();
-  
         this.afAuth.currentUser.then((user) => {
           if (user) {
             marca.userId = user.uid;
@@ -85,36 +83,9 @@ export class CreateMarcaComponent implements OnInit {
       console.log(error);
     });
   }
-
-  // agregarMarca(){
-  //   const marca:any={
-  //     nombre: this.createMarca.value.nombre,
-  //     fechaCreacion: new Date(),
-  //     fechaActualizacion: new Date(),
-  //   }
-  //   this.spinner.show();
-
-  //   this.afAuth.currentUser.then(user=>{
-  //     if(user){
-  //       marca.userId=user.uid;
-  //     }
-
-  //     this._marcaService.agregarMarca(marca).then(()=>{
-  //      console.log('Marca creado con exito');
-  //       this.toastr.success('La marca fue registrada con exito!', 'Marca registrada',{positionClass: 'toast-top-right'});
-  //       this.spinner.hide();
-  //       this.router.navigate(['/dashboard/marcas']);
-  //     }).catch(error=>{
-  //       console.log(error);
-  //       this.spinner.hide();
-  //     })
-  //   })
-  // }
-    //  
     agregarMarca() {
       // Realizar la validación
       const nombreMarca = this.createMarca.value.nombre;
-      
       this._marcaService.verificarExistenciaMarca(nombreMarca).then((existe) => {
         if (existe) {
           // La marca ya existe
@@ -126,9 +97,7 @@ export class CreateMarcaComponent implements OnInit {
             fechaCreacion: new Date(),
             fechaActualizacion: new Date(),
           };
-    
           this.spinner.show();
-    
           this.afAuth.currentUser.then((user) => {
             if (user) {
               marca.userId = user.uid;
@@ -149,8 +118,6 @@ export class CreateMarcaComponent implements OnInit {
         console.log(error);
       });
     }
-    
-
   esEditar(){
     if(this.id !== null){
       this.titulo='Editar ';
@@ -164,5 +131,4 @@ export class CreateMarcaComponent implements OnInit {
       })
     }
   }
-
 }

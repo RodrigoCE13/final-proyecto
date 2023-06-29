@@ -155,9 +155,7 @@ export class CreateMantencionComponent implements OnInit {
       this.toastr.error('No se permite guardar mantenciones futuras', 'Error', { positionClass: 'toast-top-right' });
       return;
     }
-  
     this.spinner.show();
-  
     this.afAuth.currentUser.then(user => {
       if (user) {
         mantencion.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo

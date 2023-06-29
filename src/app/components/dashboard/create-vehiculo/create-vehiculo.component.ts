@@ -156,47 +156,6 @@ export class CreateVehiculoComponent implements OnInit {
       });
     });
   }
-
-  // agregarVehiculo() {
-  //   const vehiculo: any = {
-  //     patente: this.createVehiculo.value.patente,
-  //     modelo: this.createVehiculo.value.modelo,
-  //     precio: this.createVehiculo.value.precio,
-  //     annio: this.createVehiculo.value.annio,
-  //     marca: this.createVehiculo.value.marca,
-  //     tipoVehiculo: this.createVehiculo.value.tipoVehiculo,
-  //     kilometraje: this.createVehiculo.value.kilometraje,
-  //     fechaCreacion: new Date(),
-  //     fechaActualizacion: new Date(),
-  //   };
-  
-  //   const yearActual = new Date().getFullYear();
-  //   const yearIngresado = parseInt(vehiculo.año);
-  
-  //   if (yearIngresado > yearActual) {
-  //     console.log('El año ingresado no puede ser mayor al año actual')
-  //     this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
-  //     return;
-  //   }
-  
-  //   this.spinner.show();
-  
-  //   this.afAuth.currentUser.then((user) => {
-  //     if (user) {
-  //       vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
-  //     }
-  
-  //     this._vehiculoService.agregarVehiculo(vehiculo).then(() => {
-  //       console.log('Vehiculo creado con exito');
-  //       this.toastr.success('El vehiculo fue registrado con exito!', 'Vehiculo registrado', { positionClass: 'toast-top-right' });
-  //       this.spinner.hide();
-  //       this.router.navigate(['/dashboard/vehiculos']);
-  //     }).catch(error => {
-  //       console.log(error);
-  //       this.spinner.hide();
-  //       });
-  //   });
-  // }
   formatPatente(patente: string): string {
     const firstPart = patente.substring(0, 2);
     const secondPart = patente.substring(2, 4);
@@ -207,9 +166,67 @@ export class CreateVehiculoComponent implements OnInit {
     const pattern = /^[A-Z]{2}-[A-Z]{2}-\d{2}$/;
     return pattern.test(patente);
   }
+  // agregarVehiculo() {
+  //   let patente = this.createVehiculo.value.patente.toUpperCase();
+  //   const nombreModelo = this.createVehiculo.value.modelo;
+  //   if (!this.validarPatenteFormato(patente)) {
+  //     // La patente no está en el formato deseado, se le dará formato
+  //     patente = this.formatPatente(patente);
+  //   }
+  
+  //   const vehiculo: any = {
+  //     patente: patente,
+  //     modelo: nombreModelo.toLowerCase().charAt(0).toUpperCase() + nombreModelo.toLowerCase().slice(1),
+  //     precio: this.createVehiculo.value.precio,
+  //     annio: this.createVehiculo.value.annio,
+  //     marca: this.createVehiculo.value.marca,
+  //     tipoVehiculo: this.createVehiculo.value.tipoVehiculo,
+  //     kilometraje: this.createVehiculo.value.kilometraje,
+  //     fechaCreacion: new Date(),
+  //     fechaActualizacion: new Date(),
+  //   };
+  
+  //   const yearActual = new Date().getFullYear();
+  //   const yearIngresado = parseInt(vehiculo.annio);
+  
+  //   if (yearIngresado > yearActual) {
+  //             this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
+  //             return;
+  //           }
+  
+  //   this.spinner.show();
+  
+  //   this.afAuth.currentUser.then((user) => {
+  //     if (user) {
+  //       vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
+  //     }
+  //     // Verificar si la patente ya existe en la base de datos
+  //     this._vehiculoService.verificarPatenteExistente(vehiculo.patente).then((existePatente) => {
+  //       if (existePatente) {
+  //         this.toastr.error('La patente ya está registrada', 'Error', { positionClass: 'toast-top-right' });
+  //         this.spinner.hide();
+  //       } else {
+  //         // La patente no existe, se puede agregar el vehículo
+  //         this._vehiculoService.agregarVehiculo(vehiculo).then(() => {
+  //           console.log('Vehiculo creado con éxito');
+  //           this.toastr.success('El vehiculo fue registrado con éxito!', 'Vehiculo registrado', { positionClass: 'toast-top-right' });
+  //           this.spinner.hide();
+  //           this.router.navigate(['/dashboard/vehiculos']);
+  //         }).catch(error => {
+  //           console.log(error);
+  //           this.spinner.hide();
+  //         });
+  //       }
+  //     }).catch(error => {
+  //       console.log(error);
+  //       this.spinner.hide();
+  //     });
+  //   });
+  // }
   agregarVehiculo() {
     let patente = this.createVehiculo.value.patente.toUpperCase();
     const nombreModelo = this.createVehiculo.value.modelo;
+  
     if (!this.validarPatenteFormato(patente)) {
       // La patente no está en el formato deseado, se le dará formato
       patente = this.formatPatente(patente);
@@ -231,9 +248,9 @@ export class CreateVehiculoComponent implements OnInit {
     const yearIngresado = parseInt(vehiculo.annio);
   
     if (yearIngresado > yearActual) {
-              this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
-              return;
-            }
+      this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
+      return;
+    }
   
     this.spinner.show();
   
@@ -241,13 +258,11 @@ export class CreateVehiculoComponent implements OnInit {
       if (user) {
         vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
       }
-      // Verificar si la patente ya existe en la base de datos
       this._vehiculoService.verificarPatenteExistente(vehiculo.patente).then((existePatente) => {
         if (existePatente) {
           this.toastr.error('La patente ya está registrada', 'Error', { positionClass: 'toast-top-right' });
           this.spinner.hide();
         } else {
-          // La patente no existe, se puede agregar el vehículo
           this._vehiculoService.agregarVehiculo(vehiculo).then(() => {
             console.log('Vehiculo creado con éxito');
             this.toastr.success('El vehiculo fue registrado con éxito!', 'Vehiculo registrado', { positionClass: 'toast-top-right' });
@@ -264,7 +279,7 @@ export class CreateVehiculoComponent implements OnInit {
       });
     });
   }
-
+  
   esEditar(){
     if(this.id !== null){
       this.titulo='Editar ';
@@ -284,5 +299,4 @@ export class CreateVehiculoComponent implements OnInit {
       })
     }
   }
-
 }
