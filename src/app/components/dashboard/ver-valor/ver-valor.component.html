@@ -2,6 +2,7 @@
     <div class="mt-5 col-md-6 offset-md-3">
       <div class="row align-items-center mb-2">
         <div class="col mb-5 text-center">
+          <div *ngIf="annio > 2012 && precio > 0">
             <h2>Seleccione un tipo de depreciacion
                 <br>
                 <mat-button-toggle-group name="fontStyle" appearance="legacy" aria-label="Font Style" (change)="mostrarDiv($event.value)" class="mt-2">
@@ -10,40 +11,44 @@
                   <mat-button-toggle value="alta"><mat-icon>trending_up</mat-icon> Alta</mat-button-toggle>
                 </mat-button-toggle-group>
             </h2>
+            </div>
+            <h2 *ngIf="preciofinalBj===0">Su vehiculo no tiene el valor ingresado</h2>
+            <h2 *ngIf="annio<=2012">Su vehiculo es muy antiguo para calcular la depreciacion por lo que su valor es el 10% del valor de compra</h2>
             
-          <div class="deva1 mt-3" *ngIf="tipoDepreciacion === 'baja'">
-            <h3 class="titulos">Depreciacion Baja</h3>
-            <h1 class="titulos">El valor del vehiculo estimado es: <span class="text-primary">${{preciofinalBj}}</span></h1>
-            <h2 class="titulos">{{patente}} - {{modelo}} {{annio}}</h2>
-            <h3 class="titulos">
-              El precio inicial de compra fue<br> <span class="text-success">${{precio}}</span><br>
-              Hasta la fecha actual se devaluo en<br> <span class="text-danger">${{devaluacionBj}}</span>
-            </h3>
-          </div>
-          <div class="deva1 mt-3" *ngIf="tipoDepreciacion === 'media'">
-            <h3 class="titulos">Depreciacion Media</h3>
-            <h1 class="titulos">El valor del vehiculo estimado es: <span class="text-primary">${{preciofinalMd}}</span></h1>
-            <h2 class="titulos">{{patente}} - {{modelo}} {{annio}}</h2>
-            <h3 class="titulos">
-              El precio inicial de compra fue<br> <span class="text-success">${{precio}}</span><br>
-              Hasta la fecha actual se devaluo en<br> <span class="text-danger">${{devaluacionMd}}</span>
-            </h3>
-          </div>
-          <div class="deva1 mt-3" *ngIf="tipoDepreciacion === 'alta'">
-            <h3 class="titulos">Depreciacion Alta</h3>
-            <h1 class="titulos">El valor del vehiculo estimado es: <span class="text-primary">${{preciofinalAl}}</span></h1>
-            <h2 class="titulos">{{patente}} - {{modelo}} {{annio}}</h2>
-            <h3 class="titulos">
-              El precio inicial de compra fue<br> <span class="text-success">${{precio}}</span><br>
-              Hasta la fecha actual se devaluo en<br> <span class="text-danger">${{devaluacionAl}}</span>
-            </h3>
-          </div>
+              <div class="deva1 mt-3" *ngIf="tipoDepreciacion === 'baja'">
+                <h3 class="titulos">Depreciacion Baja</h3>
+                <h1 class="titulos">El valor del vehiculo estimado es: <span class="text-primary">${{preciofinalBj}}</span></h1>
+                <h2 class="titulos">{{patente}} - {{modelo}} {{annio}}</h2>
+                <h3 class="titulos">
+                  El precio inicial de compra fue<br> <span class="text-success">${{precio}}</span><br>
+                  Hasta la fecha actual se devaluo en<br> <span class="text-danger">${{devaluacionBj}}</span>
+                </h3>
+              </div>
+              <div class="deva1 mt-3" *ngIf="tipoDepreciacion === 'media'">
+                <h3 class="titulos">Depreciacion Media</h3>
+                <h1 class="titulos">El valor del vehiculo estimado es: <span class="text-primary">${{preciofinalMd}}</span></h1>
+                <h2 class="titulos">{{patente}} - {{modelo}} {{annio}}</h2>
+                <h3 class="titulos">
+                  El precio inicial de compra fue<br> <span class="text-success">${{precio}}</span><br>
+                  Hasta la fecha actual se devaluo en<br> <span class="text-danger">${{devaluacionMd}}</span>
+                </h3>
+              </div>
+              <div class="deva1 mt-3" *ngIf="tipoDepreciacion === 'alta'">
+                <h3 class="titulos">Depreciacion Alta</h3>
+                <h1 class="titulos">El valor del vehiculo estimado es: <span class="text-primary">${{preciofinalAl}}</span></h1>
+                <h2 class="titulos">{{patente}} - {{modelo}} {{annio}}</h2>
+                <h3 class="titulos">
+                  El precio inicial de compra fue<br> <span class="text-success">${{precio}}</span><br>
+                  Hasta la fecha actual se devaluo en<br> <span class="text-danger">${{devaluacionAl}}</span>
+                </h3>
+              </div>
+            </div>
           
           <div class="mt-5 text-center" >
             <p class="text-secondary">IMPORTANTE<br>El valor entregado es un aproximado y este puede variar segun otras especificaciones de su vehiculo.</p>
           </div>
         </div>
-      </div>
+      
     </div>
 
   

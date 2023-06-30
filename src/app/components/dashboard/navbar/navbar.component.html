@@ -6,7 +6,8 @@
       </a>
       <div *ngIf="userEmail" class="text-white me-3 row align-items-center">
         <div class="col d-flex">
-            <p>{{ userEmail }}</p>
+            <p *ngIf="userEmail!=='rodrigo.ce.1091'">{{ userEmail }}</p>
+            <p *ngIf="userEmail=='rodrigo.ce.1091'"> Admin | {{userEmail }}</p>
             <mat-icon *ngIf="userEmail!=='rodrigo.ce.1091'" class="ms-2">face</mat-icon>
             <mat-icon *ngIf="userEmail=='rodrigo.ce.1091'" class="ms-2">face_retouching_natural</mat-icon>
         </div>
@@ -88,3 +89,7 @@
         </div>
     </div>
 </nav>
+
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#0C3B81" type = "ball-scale-pulse" [fullScreen] = "true">
+    <p style="color: white" > CERRANDO SESION... </p>
+</ngx-spinner>

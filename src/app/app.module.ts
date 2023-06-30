@@ -17,8 +17,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,

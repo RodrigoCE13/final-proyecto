@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { AuthGuard } from 'src/guards/auth.guards';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { EmailGuard } from 'src/guards/email.guard';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { InicioComponent } from './inicio/inicio.component';
@@ -19,7 +20,7 @@ import { VerTipoVehiculoComponent } from './ver-tipo-vehiculo/ver-tipo-vehiculo.
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
 
 const routes: Routes = [
-  {path: '', component: DashboardComponent, children: [
+  {path: '', component: DashboardComponent,canActivate: [AuthGuard], children: [
     {path: '', component: InicioComponent},
     //mecanico
     {path: 'create-mecanico', component: CreateMecanicoComponent},
@@ -34,13 +35,13 @@ const routes: Routes = [
     {path: 'edit-tipo-mantencion/:id', component: CreateTipoMantencionComponent},
     {path: 'tipo-mantenciones', component: VerTipoMantencionComponent},
     //marca
-    {path: 'create-marca', component: CreateMarcaComponent, canActivate: [AuthGuard]},
-    {path: 'edit-marca/:id', component: CreateMarcaComponent, canActivate: [AuthGuard]},
-    {path: 'marcas', component: VerMarcaComponent, canActivate: [AuthGuard]},
+    {path: 'create-marca', component: CreateMarcaComponent, canActivate: [EmailGuard]},
+    {path: 'edit-marca/:id', component: CreateMarcaComponent, canActivate: [EmailGuard]},
+    {path: 'marcas', component: VerMarcaComponent, canActivate: [EmailGuard]},
     //tipoVehiculo
-    {path: 'create-tipo-vehiculo', component: CreateTipoVehiculoComponent, canActivate: [AuthGuard]},
-    {path: 'edit-tipo-vehiculo/:id', component: CreateTipoVehiculoComponent, canActivate: [AuthGuard]},
-    {path: 'tipo-vehiculos', component: VerTipoVehiculoComponent, canActivate: [AuthGuard]},
+    {path: 'create-tipo-vehiculo', component: CreateTipoVehiculoComponent, canActivate: [EmailGuard]},
+    {path: 'edit-tipo-vehiculo/:id', component: CreateTipoVehiculoComponent, canActivate: [EmailGuard]},
+    {path: 'tipo-vehiculos', component: VerTipoVehiculoComponent, canActivate: [EmailGuard]},
     //vehiculo
     {path: 'create-vehiculo', component: CreateVehiculoComponent},
     {path: 'edit-vehiculo/:id', component: CreateVehiculoComponent},

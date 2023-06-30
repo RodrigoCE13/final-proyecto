@@ -76,41 +76,49 @@ export class CreateVehiculoComponent implements OnInit {
     }else{
       this.editarVehiculo(this.id);
     }
-    
   }
-  // editarVehiculo(id: string) {
-  //   const vehiculo: any = {
-  //     patente: this.createVehiculo.value.patente,
-  //     modelo: this.createVehiculo.value.modelo,
-  //     precio: this.createVehiculo.value.precio,
-  //     annio: this.createVehiculo.value.annio,
-  //     marca: this.createVehiculo.value.marca,
-  //     tipoVehiculo: this.createVehiculo.value.tipoVehiculo,
-  //     kilometraje: this.createVehiculo.value.kilometraje,
-  //     fechaActualizacion: new Date(),
-  //   };
+  formatPatente(patente: string): string {
+    const firstPart = patente.substring(0, 2);
+    const secondPart = patente.substring(2, 4);
+    const thirdPart = patente.substring(4, 6);
+    return `${firstPart}-${secondPart}-${thirdPart}`;
+  }
+  formatPatente2(patente: string): string {
+    const regex = /^([A-Za-z]{2})(\d{2})(\d{2})$/;
+    const matches = patente.match(regex);
+    if (matches) {
+      const firstPart = matches[1];
+      const secondPart = matches[2];
+      const thirdPart = matches[3];
+      return `${firstPart}-${secondPart}-${thirdPart}`;
+    }
+    return patente;
+  }
+  sonDatosIguales(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
   
-  //   this.spinner.show();
-  
-  //   this.afAuth.currentUser.then(user => {
-  //     if (user) {
-  //       vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
-  //     }
-  
-  //     this._vehiculoService.actualizarVehiculo(id, vehiculo).then(() => {
-  //       this.spinner.hide();
-  //       this.toastr.info('El vehiculo fue modificado con exito!', 'Vehiculo modificado', { positionClass: 'toast-top-right' });
-  //       this.router.navigate(['/dashboard/vehiculos']);
-  //     });
-  //   });
-  // }
+  validarPatenteFormato(patente: string): boolean {
+    const pattern = /^[A-Z]{2}-[A-Z]{2}-\d{2}$/;
+    return pattern.test(patente);
+  }
+  validarPatenteFormato2(patente: string): boolean {
+    const pattern = /^[A-Z]{2}-\d{2}-\d{2}$/;
+    return pattern.test(patente);
+  }
   editarVehiculo(id: string) {
     let patente = this.createVehiculo.value.patente.toUpperCase();
     const nombreModelo = this.createVehiculo.value.modelo;
+  
     if (!this.validarPatenteFormato(patente)) {
       // La patente no está en el formato deseado, se le dará formato
-      patente = this.formatPatente(patente);
+      if (this.validarPatenteFormato2(patente)) {
+        patente = this.formatPatente2(patente);
+      } else {
+        patente = this.formatPatente(patente);
+      }
     }
+  
     const vehiculo: any = {
       patente: patente,
       modelo: nombreModelo.toLowerCase().charAt(0).toUpperCase() + nombreModelo.toLowerCase().slice(1),
@@ -127,24 +135,25 @@ export class CreateVehiculoComponent implements OnInit {
     const yearIngresado = parseInt(vehiculo.annio);
   
     if (yearIngresado > yearActual) {
-              this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
-              return;
-            }
+      this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
+      return;
+    }
+  
     this.spinner.show();
+  
     this.afAuth.currentUser.then((user) => {
       if (user) {
         vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
       }
-      // Verificar si la patente ya existe en la base de datos
       this._vehiculoService.verificarPatenteExistente(vehiculo.patente).then((existePatente) => {
         if (existePatente) {
           this.toastr.error('La patente ya está registrada', 'Error', { positionClass: 'toast-top-right' });
           this.spinner.hide();
         } else {
-          // La patente no existe, se puede agregar el vehículo
+          // La patente no existe o no ha sido modificada, se puede editar el vehículo
           this._vehiculoService.actualizarVehiculo(id, vehiculo).then(() => {
             this.spinner.hide();
-            this.toastr.info('El vehiculo fue modificado con exito!', 'Vehiculo modificado', { positionClass: 'toast-top-right' });
+            this.toastr.info('El vehiculo fue modificado con éxito!', 'Vehiculo modificado', { positionClass: 'toast-top-right' });
             this.router.navigate(['/dashboard/vehiculos']);
           }).catch(error => {
             console.log(error);
@@ -157,16 +166,16 @@ export class CreateVehiculoComponent implements OnInit {
       });
     });
   }
-  formatPatente(patente: string): string {
-    const firstPart = patente.substring(0, 2);
-    const secondPart = patente.substring(2, 4);
-    const thirdPart = patente.substring(4, 6);
-    return `${firstPart}-${secondPart}-${thirdPart}`;
-  }
-  validarPatenteFormato(patente: string): boolean {
-    const pattern = /^[A-Z]{2}-[A-Z]{2}-\d{2}$/;
-    return pattern.test(patente);
-  }
+  //formatPatente(patente: string): string {
+  //  const firstPart = patente.substring(0, 2);
+  //  const secondPart = patente.substring(2, 4);
+  //  const thirdPart = patente.substring(4, 6);
+  //  return `${firstPart}-${secondPart}-${thirdPart}`; 
+  //}
+  //validarPatenteFormato(patente: string): boolean {
+  //  const pattern = /^[A-Z]{2}-[A-Z]{2}-\d{2}$/;
+  //  return pattern.test(patente);
+  //}
   // agregarVehiculo() {
   //   let patente = this.createVehiculo.value.patente.toUpperCase();
   //   const nombreModelo = this.createVehiculo.value.modelo;
@@ -175,64 +184,18 @@ export class CreateVehiculoComponent implements OnInit {
   //     patente = this.formatPatente(patente);
   //   }
   
-  //   const vehiculo: any = {
-  //     patente: patente,
-  //     modelo: nombreModelo.toLowerCase().charAt(0).toUpperCase() + nombreModelo.toLowerCase().slice(1),
-  //     precio: this.createVehiculo.value.precio,
-  //     annio: this.createVehiculo.value.annio,
-  //     marca: this.createVehiculo.value.marca,
-  //     tipoVehiculo: this.createVehiculo.value.tipoVehiculo,
-  //     kilometraje: this.createVehiculo.value.kilometraje,
-  //     fechaCreacion: new Date(),
-  //     fechaActualizacion: new Date(),
-  //   };
-  
-  //   const yearActual = new Date().getFullYear();
-  //   const yearIngresado = parseInt(vehiculo.annio);
-  
-  //   if (yearIngresado > yearActual) {
-  //             this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
-  //             return;
-  //           }
-  
-  //   this.spinner.show();
-  
-  //   this.afAuth.currentUser.then((user) => {
-  //     if (user) {
-  //       vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
-  //     }
-  //     // Verificar si la patente ya existe en la base de datos
-  //     this._vehiculoService.verificarPatenteExistente(vehiculo.patente).then((existePatente) => {
-  //       if (existePatente) {
-  //         this.toastr.error('La patente ya está registrada', 'Error', { positionClass: 'toast-top-right' });
-  //         this.spinner.hide();
-  //       } else {
-  //         // La patente no existe, se puede agregar el vehículo
-  //         this._vehiculoService.agregarVehiculo(vehiculo).then(() => {
-  //           console.log('Vehiculo creado con éxito');
-  //           this.toastr.success('El vehiculo fue registrado con éxito!', 'Vehiculo registrado', { positionClass: 'toast-top-right' });
-  //           this.spinner.hide();
-  //           this.router.navigate(['/dashboard/vehiculos']);
-  //         }).catch(error => {
-  //           console.log(error);
-  //           this.spinner.hide();
-  //         });
-  //       }
-  //     }).catch(error => {
-  //       console.log(error);
-  //       this.spinner.hide();
-  //     });
-  //   });
-  // }
   agregarVehiculo() {
     let patente = this.createVehiculo.value.patente.toUpperCase();
     const nombreModelo = this.createVehiculo.value.modelo;
   
     if (!this.validarPatenteFormato(patente)) {
       // La patente no está en el formato deseado, se le dará formato
-      patente = this.formatPatente(patente);
+      if (this.validarPatenteFormato2(patente)) {
+        patente = this.formatPatente2(patente);
+      } else {
+        patente = this.formatPatente(patente);
+      }
     }
-  
     const vehiculo: any = {
       patente: patente,
       modelo: nombreModelo.toLowerCase().charAt(0).toUpperCase() + nombreModelo.toLowerCase().slice(1),

@@ -1,33 +1,36 @@
 <div class="body">
     <div class="login">
-      <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
+      <div class="p-4 bg-white rounded-3">
+        <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
         <form *ngIf="!loading" [formGroup]="registrarUsuario" (ngSubmit)="registrar()">
-            <h1>Registro de usuarios</h1>
+          <h1>Mecan<span style="color: orange;">APP</span></h1>
+          <h2>Registro de usuarios</h2>
             <div>
-              <mat-form-field class="ancho" appearance="fill">
-                <mat-label>Email</mat-label>
-                <input type="email" matInput autocomplete="off" formControlName="email">
-              </mat-form-field>
+                <mat-form-field class="ancho" appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput autocomplete="off" formControlName="email">
+                </mat-form-field>
             </div>
             <span *ngIf="registrarUsuario.get('email')?.hasError('required') && registrarUsuario.get('email')?.touched" class="text-danger error-label">Debe ingresar el correo</span>
             <span *ngIf="registrarUsuario.get('email')?.hasError('email') && registrarUsuario.get('email')?.touched" class="text-danger error-label">El correo es invalido</span>
             <div>
-              <mat-form-field class="ancho" appearance="fill">
-                <mat-label>Contraseña</mat-label>
-                <input type="password" matInput autocomplete="off" formControlName="password">
-              </mat-form-field>
+                <mat-form-field class="ancho" appearance="fill">
+                    <mat-label>Contraseña</mat-label>
+                    <input type="password" matInput autocomplete="off" formControlName="password">
+                </mat-form-field>
             </div>
-              <span *ngIf="registrarUsuario.get('password')?.hasError('required') && registrarUsuario.get('password')?.touched" class="text-danger error-label">Debe ingresar una contraseña</span>
-              <span *ngIf="registrarUsuario.get('password')?.hasError('minlength') && registrarUsuario.get('password')?.touched" class="text-danger error-label">La contraseña debe tener minimo 6 caracteres</span>
+            <span *ngIf="registrarUsuario.get('password')?.hasError('required') && registrarUsuario.get('password')?.touched" class="text-danger error-label">Debe ingresar una contraseña</span>
+            <span *ngIf="registrarUsuario.get('password')?.hasError('minlength') && registrarUsuario.get('password')?.touched" class="text-danger error-label">La contraseña debe tener minimo 6 caracteres</span>
             <div>
-              <mat-form-field class="ancho" appearance="fill">
-                <mat-label>Repetir Contraseña</mat-label>
-                <input type="password" matInput autocomplete="off" formControlName="repetirPassword">
-              </mat-form-field>
+                <mat-form-field class="ancho" appearance="fill">
+                    <mat-label>Repetir Contraseña</mat-label>
+                    <input type="password" matInput autocomplete="off" formControlName="repetirPassword">
+                </mat-form-field>
             </div>
-              <span *ngIf="registrarUsuario.get('repetirPassword')?.hasError('required') && registrarUsuario.get('repetirPassword')?.touched" class="text-danger error-label">Debe repetir la contraseña</span>
-              <button mat-raised-button color="primary" class="ancho" type="submit" [disabled]="registrarUsuario.invalid">Registrarse</button>
-              <button mat-raised-button class="ancho mt-2 btn btn-warning" type="button" routerLink="/login">Volver</button>
-        </form>
+            <span *ngIf="registrarUsuario.get('repetirPassword')?.hasError('required') && registrarUsuario.get('repetirPassword')?.touched" class="text-danger error-label">Debe repetir la contraseña</span>
+            <button mat-raised-button color="primary" class="ancho" type="submit" [disabled]="registrarUsuario.invalid">Registrarse</button>
+            <button mat-raised-button class="ancho mt-2 btn btn-warning" type="button" routerLink="/login">Volver</button>
+        </form> 
+      </div>
     </div>
 </div>

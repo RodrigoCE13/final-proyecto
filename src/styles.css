@@ -12,7 +12,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 .login{
     width: 100%;
-    max-width: 330px;
+    max-width: 400px;
     text-align: center;
 }
 .spinner {
@@ -56,5 +56,8 @@ th{
 a{
   cursor: pointer;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
