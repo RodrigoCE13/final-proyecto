@@ -161,7 +161,7 @@ export class CreateVehiculoComponent implements OnInit {
     const firstPart = patente.substring(0, 2);
     const secondPart = patente.substring(2, 4);
     const thirdPart = patente.substring(4, 6);
-    return `${firstPart}-${secondPart}-${thirdPart}`;
+    return `${firstPart}-${secondPart}-${thirdPart}`; 
   }
   validarPatenteFormato(patente: string): boolean {
     const pattern = /^[A-Z]{2}-[A-Z]{2}-\d{2}$/;
