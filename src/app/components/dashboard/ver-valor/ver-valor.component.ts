@@ -93,7 +93,7 @@ export class VerValorComponent implements OnInit {
         else{
           this.devaluacionMd = Math.trunc(this.devaluacionMd);
           this.preciofinalMd = Math.trunc(this.preciofinalMd);
-          this.depreciacionMd=0.85;
+          this.depreciacionMd=0.85; 
         }
     }
   }
