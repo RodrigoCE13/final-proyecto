@@ -30,7 +30,7 @@
             <span *ngIf="registrarUsuario.get('repetirPassword')?.hasError('required') && registrarUsuario.get('repetirPassword')?.touched" class="text-danger error-label">Debe repetir la contraseña</span>
             <button mat-raised-button color="primary" class="ancho" type="submit" [disabled]="registrarUsuario.invalid">Registrarse</button>
             <button mat-raised-button class="ancho mt-2 btn btn-warning" type="button" routerLink="/login">Volver</button>
-        </form>
+        </form> 
       </div>
     </div>
 </div>
