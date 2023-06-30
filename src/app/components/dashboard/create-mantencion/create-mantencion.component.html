@@ -28,10 +28,10 @@
                 </mat-radio-group>
 
             </div>
-            <div class="col">
+            <div class="col mt-2">
                 <mat-form-field style="width: 50%;" *ngIf="mostrarTipoPrev">
                     <mat-label>Mantencion preventiva</mat-label>
-                    <mat-select formControlName="tipoMantencionPreventiva">
+                    <mat-select formControlName="tipoMantencionPreventiva" >
                         <mat-option *ngFor="let tipoP of tipoPrev" [value]="tipoP.id">{{ tipoP.nombre }}</mat-option>
                     </mat-select>
                 </mat-form-field>

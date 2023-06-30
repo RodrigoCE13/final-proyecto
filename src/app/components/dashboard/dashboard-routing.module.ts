@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { AuthGuard } from 'src/guards/auth.guards';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { InicioComponent } from './inicio/inicio.component';
@@ -33,13 +34,13 @@ const routes: Routes = [
     {path: 'edit-tipo-mantencion/:id', component: CreateTipoMantencionComponent},
     {path: 'tipo-mantenciones', component: VerTipoMantencionComponent},
     //marca
-    {path: 'create-marca', component: CreateMarcaComponent},
-    {path: 'edit-marca/:id', component: CreateMarcaComponent},
-    {path: 'marcas', component: VerMarcaComponent},
+    {path: 'create-marca', component: CreateMarcaComponent, canActivate: [AuthGuard]},
+    {path: 'edit-marca/:id', component: CreateMarcaComponent, canActivate: [AuthGuard]},
+    {path: 'marcas', component: VerMarcaComponent, canActivate: [AuthGuard]},
     //tipoVehiculo
-    {path: 'create-tipo-vehiculo', component: CreateTipoVehiculoComponent},
-    {path: 'edit-tipo-vehiculo/:id', component: CreateTipoVehiculoComponent},
-    {path: 'tipo-vehiculos', component: VerTipoVehiculoComponent},
+    {path: 'create-tipo-vehiculo', component: CreateTipoVehiculoComponent, canActivate: [AuthGuard]},
+    {path: 'edit-tipo-vehiculo/:id', component: CreateTipoVehiculoComponent, canActivate: [AuthGuard]},
+    {path: 'tipo-vehiculos', component: VerTipoVehiculoComponent, canActivate: [AuthGuard]},
     //vehiculo
     {path: 'create-vehiculo', component: CreateVehiculoComponent},
     {path: 'edit-vehiculo/:id', component: CreateVehiculoComponent},

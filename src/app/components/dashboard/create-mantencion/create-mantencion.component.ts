@@ -89,6 +89,9 @@ export class CreateMantencionComponent implements OnInit {
         })
       });
     });
+    this.mostrarProxFecha = false;
+    this.mostrarTipoPrev = false;
+    this.mostrarTipoLegal = false;
   }
   agregarEditar(){
     this.submitted = true;
@@ -100,9 +103,9 @@ export class CreateMantencionComponent implements OnInit {
     }else{
       this.editarMantencion(this.id);
     }
-    this.mostrarProxFecha = false;
     this.mostrarTipoLegal = false;
     this.mostrarTipoPrev = false;
+    this.mostrarProxFecha = false;
   }
   agregarMantencion() {
     const mantencion: any = {
@@ -142,6 +145,10 @@ export class CreateMantencionComponent implements OnInit {
         (yearProxMantencion === yearActual && monthProxMantencion === monthActual && dayProxMantencion < dayActual)
       ) {
         this.toastr.error('La fecha de próxima mantención debe ser mayor a la fecha actual', 'Error', { positionClass: 'toast-top-right' });
+        if (this.mostrarTipoPrev) {
+          this.mostrarProxFecha = true;
+        }
+        this.createMantencion.reset(); // Limpiar el formulario
         return;
       }
   
@@ -154,8 +161,10 @@ export class CreateMantencionComponent implements OnInit {
       (yearIngresado === yearActual && monthIngresado === monthActual && dayIngresado > dayActual)
     ) {
       this.toastr.error('No se permite guardar mantenciones futuras', 'Error', { positionClass: 'toast-top-right' });
+      this.createMantencion.reset(); // Limpiar el formulario
       return;
     }
+  
     this.spinner.show();
     this.afAuth.currentUser.then(user => {
       if (user) {
@@ -175,9 +184,17 @@ export class CreateMantencionComponent implements OnInit {
     });
   }
   
+  
 
   mostrarProximaFecha() {
-    this.mostrarProxFecha = !this.mostrarProxFecha;
+    const tipoMantencionPreventiva = this.createMantencion.get('tipoMantencionPreventiva');
+    const tipoMantencionLegal = this.createMantencion.get('tipoMantencionLegal');
+  
+    if (tipoMantencionPreventiva && tipoMantencionPreventiva.value) {
+      this.mostrarProxFecha = true;
+    } else if (tipoMantencionLegal && tipoMantencionLegal.value) {
+      this.mostrarProxFecha = false;
+    }
   }
   mostrarLegal() {
     this.mostrarTipoLegal = !this.mostrarTipoLegal;
@@ -187,10 +204,9 @@ export class CreateMantencionComponent implements OnInit {
     
   }
   mostrarPrev() {
-    this.mostrarTipoPrev = !this.mostrarTipoPrev;
-    if(this.mostrarTipoPrev==true){
-      this.mostrarTipoLegal = false;
-    }
+    this.mostrarTipoPrev = true;
+    this.mostrarTipoLegal = false;
+    this.mostrarProxFecha = !this.mostrarTipoPrev;
   }
 
   editarMantencion(id: string) {
@@ -221,17 +237,18 @@ export class CreateMantencionComponent implements OnInit {
     });
   }
 
-  esEditar(){
-    if(this.id !== null){
-      this.titulo='Editar ';
+  esEditar() {
+    if (this.id !== null) {
+      this.titulo = 'Editar ';
       this.spinner.show();
-      this._mantencionService.getMantencion(this.id).subscribe(data=>{
+      this._mantencionService.getMantencion(this.id).subscribe(data => {
         this.spinner.hide();
         console.log(data.payload.data()['descripcion']);
-        this.createMantencion.setValue({
+        const fecha = data.payload.data()['fecha'].toDate(); // Obtener la fecha como objeto Date
+        this.createMantencion.patchValue({
           descripcion: data.payload.data()['descripcion'],
           costo: data.payload.data()['costo'],
-          fecha: data.payload.data()['fecha'],
+          fecha: fecha, // Establecer la fecha utilizando patchValue()
           vehiculo: data.payload.data()['vehiculo'],
           mecanico: data.payload.data()['mecanico'],
           tipoMantencionPreventiva: data.payload.data()['tipoMantencionPreventiva'],
@@ -241,6 +258,7 @@ export class CreateMantencionComponent implements OnInit {
       })
     }
   }
+  
 
   getMarcas() {
     this._mantencionService.getMarcas().subscribe(data => {
