@@ -119,6 +119,7 @@ export class CreateMantencionComponent implements OnInit {
       fechaProxMantencion: this.createMantencion.value.fechaProxMantencion,
       fechaCreacion: new Date(),
       fechaActualizacion: new Date(),
+      seEnvioCorreo: false,
     };
   
     const fechaActual = new Date();

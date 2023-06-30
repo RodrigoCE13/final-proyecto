@@ -88,10 +88,12 @@ export class VerValorComponent implements OnInit {
           this.devaluacionMd = precio * 0.9;
           this.devaluacionMd = Math.trunc(this.devaluacionMd);
           this.preciofinalMd = Math.trunc(this.preciofinalMd);
+          this.depreciacionMd=0.85;
         }
         else{
           this.devaluacionMd = Math.trunc(this.devaluacionMd);
           this.preciofinalMd = Math.trunc(this.preciofinalMd);
+          this.depreciacionMd=0.85;
         }
     }
   }
@@ -118,10 +120,12 @@ export class VerValorComponent implements OnInit {
           this.devaluacionBj = precio * 0.9;
           this.devaluacionBj = Math.trunc(this.devaluacionBj);
           this.preciofinalBj = Math.trunc(this.preciofinalBj);
+          this.depreciacionBj = 0.9;
         }
         else{
           this.devaluacionBj = Math.trunc(this.devaluacionBj);
           this.preciofinalBj = Math.trunc(this.preciofinalBj);
+          this.depreciacionBj = 0.9;
         }
     }
   }
@@ -148,10 +152,12 @@ export class VerValorComponent implements OnInit {
           this.devaluacionAl = precio * 0.9;
           this.devaluacionAl = Math.trunc(this.devaluacionAl);
           this.preciofinalAl = Math.trunc(this.preciofinalAl);
+          this.depreciacionAl=0.8;
         }
         else{
           this.devaluacionAl = Math.trunc(this.devaluacionAl);
           this.preciofinalAl = Math.trunc(this.preciofinalAl);
+          this.depreciacionAl=0.8;
         }
     }
   }
