@@ -48,19 +48,39 @@ export class InicioComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  formatDate(timestamp: firebase.firestore.Timestamp): string {
-    const date = timestamp.toDate();
-    // Formatea la fecha como desees, por ejemplo:
-    const formattedDate = date.toLocaleDateString(); // Formato: dd/mm/aaaa
-    return formattedDate;
+  //formatDate(timestamp: firebase.firestore.Timestamp): string {
+  //  if (timestamp && timestamp.toDate) {
+  //    const date = timestamp.toDate();
+  //    const formattedDate = date.toLocaleDateString();
+  //    return formattedDate;
+  //  }
+  //  return '';
+  //}
+  esFechaActual(fecha: firebase.firestore.Timestamp): boolean {
+    const fechaProxMantencion = fecha.toDate();
+    const fechaActual = new Date();
+    const fechaProxMantencionSinTiempo = new Date(
+      fechaProxMantencion.getFullYear(),
+      fechaProxMantencion.getMonth(),
+      fechaProxMantencion.getDate()
+    );
+    const fechaActualSinTiempo = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth(),
+      fechaActual.getDate()
+    );
+    return fechaProxMantencionSinTiempo <= fechaActualSinTiempo;
   }
+  
+  
+  
   getProximasMantenciones() {
     this._mantencionService.getMantencionesByFechaProx().subscribe(data => {
       this.proximasMantenciones = [];
       data.forEach((element: any) => {
         const mantencion = element.payload.doc.data();
         mantencion.id = element.payload.doc.id;
-        mantencion.fechaProxMantencion = this.formatDate(mantencion.fecha);
+        //mantencion.fechaProxMantencion = this.formatDate(mantencion.fechaProxMantencion);
         this.proximasMantenciones.push(mantencion);
       });
     });
@@ -109,5 +129,5 @@ export class InicioComponent implements OnInit {
     const marca = this.marcas.find(m => m.id === marcaId);
     return marca ? marca.nombre : '';
   }
-
+  
 }

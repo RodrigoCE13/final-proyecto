@@ -244,7 +244,7 @@ export class CreateMantencionComponent implements OnInit {
       this._mantencionService.getMantencion(this.id).subscribe(data => {
         this.spinner.hide();
         console.log(data.payload.data()['descripcion']);
-        const fecha = data.payload.data()['fecha'].toDate(); // Obtener la fecha como objeto Date
+        const fecha: any = data.payload.data()['fecha'].toDate(); // Obtener la fecha como objeto Date
         this.createMantencion.patchValue({
           descripcion: data.payload.data()['descripcion'],
           costo: data.payload.data()['costo'],

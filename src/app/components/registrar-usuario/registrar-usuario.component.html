@@ -1,8 +1,10 @@
 <div class="body">
     <div class="login">
-      <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
+      <div class="p-4 bg-white rounded-3">
+        <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
         <form *ngIf="!loading" [formGroup]="registrarUsuario" (ngSubmit)="registrar()">
-            <h1>Registro de usuarios</h1>
+          <h1>Mecan<span style="color: orange;">APP</span></h1>
+          <h2>Registro de usuarios</h2>
             <div>
               <mat-form-field class="ancho" appearance="fill">
                 <mat-label>Email</mat-label>
@@ -29,5 +31,6 @@
               <button mat-raised-button color="primary" class="ancho" type="submit" [disabled]="registrarUsuario.invalid">Registrarse</button>
               <button mat-raised-button class="ancho mt-2 btn btn-warning" type="button" routerLink="/login">Volver</button>
         </form>
+      </div>
     </div>
 </div>

@@ -20,8 +20,7 @@ import { VerValorComponent } from './ver-valor/ver-valor.component';
 import { VerTipoVehiculoComponent } from './ver-tipo-vehiculo/ver-tipo-vehiculo.component';
 import { CreateTipoVehiculoComponent } from './create-tipo-vehiculo/create-tipo-vehiculo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
-
-
+import { AngularFireModule } from '@angular/fire/compat';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,7 @@ import { VerInformeComponent } from './ver-informe/ver-informe.component';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    SharedModule
+    SharedModule,
   ]
 })
 export class DashboardModule { }
