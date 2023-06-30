@@ -94,9 +94,6 @@ export class CreateVehiculoComponent implements OnInit {
     }
     return patente;
   }
-  sonDatosIguales(obj1: any, obj2: any): boolean {
-    return JSON.stringify(obj1) === JSON.stringify(obj2);
-  }
   
   validarPatenteFormato(patente: string): boolean {
     const pattern = /^[A-Z]{2}-[A-Z]{2}-\d{2}$/;
@@ -135,19 +132,25 @@ export class CreateVehiculoComponent implements OnInit {
     const yearIngresado = parseInt(vehiculo.annio);
   
     if (yearIngresado > yearActual) {
-      this.toastr.error('El año ingresado no puede ser mayor al actual'), { positionClass: 'toast-top-right' };
+      this.toastr.error('El año ingresado no puede ser mayor al actual', 'Error',{ positionClass: 'toast-top-right' });
       return;
     }
   
     this.spinner.show();
-  
     this.afAuth.currentUser.then((user) => {
       if (user) {
         vehiculo.userId = user.uid; // Agrega el ID del usuario al objeto vehiculo
       }
+  
+      // Verificar si la patente ya existe en la base de datos
       this._vehiculoService.verificarPatenteExistente(vehiculo.patente).then((existePatente) => {
-        if (existePatente) {
+        if (existePatente && vehiculo.patente !== this.createVehiculo.value.patente) {
+          // La patente ya existe y ha sido modificada, mostrar mensaje de error
           this.toastr.error('La patente ya está registrada', 'Error', { positionClass: 'toast-top-right' });
+          this.spinner.hide();
+        } else if (this.sonDatosIguales(vehiculo, this.createVehiculo.value)) {
+          // Ningún dato ha sido editado
+          this.toastr.warning('Los datos no han sido modificados', 'Error',{ positionClass: 'toast-top-right' });
           this.spinner.hide();
         } else {
           // La patente no existe o no ha sido modificada, se puede editar el vehículo
@@ -165,6 +168,10 @@ export class CreateVehiculoComponent implements OnInit {
         this.spinner.hide();
       });
     });
+  }
+  
+  sonDatosIguales(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
   //formatPatente(patente: string): string {
   //  const firstPart = patente.substring(0, 2);

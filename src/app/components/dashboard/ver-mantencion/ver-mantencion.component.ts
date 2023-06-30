@@ -134,7 +134,7 @@ export class VerMantencionComponent implements OnInit {
       if (result.isConfirmed) {
         this._mantencionService.eliminarMantencion(id).then(() => {
           console.log('Mantención eliminada con éxito');
-          this.toastr.error('¡La mantención fue eliminada con éxito!', 'Mantención eliminada', { positionClass: 'toast-bottom-right' });
+          this.toastr.error('¡La mantención fue eliminada con éxito!', 'Mantención eliminada', { positionClass: 'toast-top-right' });
         }).catch(error => {
           console.log(error);
         });

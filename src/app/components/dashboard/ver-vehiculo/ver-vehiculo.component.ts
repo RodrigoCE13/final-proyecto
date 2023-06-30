@@ -99,7 +99,7 @@ export class VerVehiculoComponent implements OnInit {
     this._mantencionServices.verificarMantencionesAsociadas(id).then(tieneMantenciones => {
       if (tieneMantenciones) {
         console.log('No se puede eliminar el vehículo porque tiene mantenimientos asociados.');
-        this.toastr.error('El vehículo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+        this.toastr.error('El vehículo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-top-right' });
       } else {
         Swal.fire({
           title: '¿Estás seguro?',
@@ -113,7 +113,7 @@ export class VerVehiculoComponent implements OnInit {
           if (result.isConfirmed) {
             this._vehiculoServices.eliminarVehiculo(id).then(()=>{
               console.log('Vehiculo eliminado con exito');
-              this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-bottom-right'});
+              this.toastr.error('El vehiculo fue eliminado con exito!', 'Vehiculo eliminado',{positionClass: 'toast-top-right'});
             }).catch(error=>{
               console.log(error);
             });

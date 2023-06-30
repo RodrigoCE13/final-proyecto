@@ -57,7 +57,7 @@ export class VerMecanicosComponent implements OnInit {
     this._mantencionServices.verificarMecanicoAsociadas(id).then(tieneMantenciones => {
       if (tieneMantenciones) {
         console.log('No se puede eliminar el mecanico porque tiene mantenciones asociadas.');
-        this.toastr.error('El mecanico que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+        this.toastr.error('El mecanico que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-top-right' });
       } else {
         Swal.fire({
           title: '¿Estás seguro?',
@@ -71,7 +71,7 @@ export class VerMecanicosComponent implements OnInit {
           if (result.isConfirmed) {
             this._mecanicoService.eliminarMecanico(id).then(() => {
               console.log('Mecánico eliminado con éxito');
-              this.toastr.error('¡El mecánico fue eliminado con éxito!', 'Mecánico eliminado', { positionClass: 'toast-bottom-right' });
+              this.toastr.error('¡El mecánico fue eliminado con éxito!', 'Mecánico eliminado', { positionClass: 'toast-top-right' });
             }).catch(error => {
               console.log(error);
             });

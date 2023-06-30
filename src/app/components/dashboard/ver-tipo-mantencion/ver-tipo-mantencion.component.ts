@@ -54,7 +54,7 @@ export class VerTipoMantencionComponent implements OnInit {
     this._mantencionServices.verificarTipoAsociadas(id).then(tieneMantenciones => {
       if (tieneMantenciones) {
         console.log('No se puede eliminar el tipo porque tiene mantenciones asociadas.');
-        this.toastr.error('El tipo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-bottom-right' });
+        this.toastr.error('El tipo que desea eliminar tiene mantenciones', 'ERROR', { positionClass: 'toast-top-right' });
       } else {
         Swal.fire({
           title: '¿Estás seguro?',
@@ -68,7 +68,7 @@ export class VerTipoMantencionComponent implements OnInit {
           if (result.isConfirmed) {
             this._tipoMantencionService.eliminarTipoMantencion(id).then(() => {
               console.log('Tipo eliminado con éxito');
-              this.toastr.error('¡El tipo fue eliminado con éxito!', 'Tipo eliminado', { positionClass: 'toast-bottom-right' });
+              this.toastr.error('¡El tipo fue eliminado con éxito!', 'Tipo eliminado', { positionClass: 'toast-top-right' });
             }).catch(error => {
               console.log(error);
             });
